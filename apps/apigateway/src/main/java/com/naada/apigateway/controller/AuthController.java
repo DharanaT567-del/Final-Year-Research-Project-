@@ -57,17 +57,17 @@ public class AuthController {
             User user = userOpt.get();
 
             String springToken = jwtService.generateToken(user.getEmail());
-            String firebaseToken = "";
+            String firebaseToken = null;
 
             try {
                 firebaseToken = FirebaseAuth.getInstance().createCustomToken(user.getFirebaseUid());
             } catch (FirebaseAuthException e) {
-                System.err.println("Firebase custom token warning: " + e.getMessage());
+                System.err.println("Firebase custom token error for UID [" + user.getFirebaseUid() + "]: " + e.getMessage());
             }
 
             Map<String, Object> response = new HashMap<>();
             response.put("springToken", springToken);
-            response.put("firebaseToken", firebaseToken);
+            response.put("firebaseToken", firebaseToken != null ? firebaseToken : "");
             response.put("userData", Map.of(
                 "id", user.getId(),
                 "name", user.getName(),
