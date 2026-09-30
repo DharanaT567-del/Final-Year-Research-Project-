@@ -1,7 +1,15 @@
 import React, { createContext, useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import auth from '@react-native-firebase/auth';
 import axiosClient from '../api/axiosClient';
+
+// Safe Firebase auth import — may not be configured yet
+let firebaseAuth = null;
+try {
+  const authModule = require('@react-native-firebase/auth');
+  firebaseAuth = authModule.default || authModule;
+} catch (e) {
+  console.warn('Firebase Auth module not available:', e.message);
+}
 
 export const AuthContext = createContext();
 
@@ -16,10 +24,9 @@ export const AuthProvider = ({ children }) => {
   const checkLocalSession = async () => {
     try {
       const token = await AsyncStorage.getItem('springToken');
-      const currentUser = auth().currentUser;
-      if (token && currentUser) {
-        const response = await axiosClient.get('/auth/me');
-        setUser(response.data);
+      const userData = await AsyncStorage.getItem('userData');
+      if (token && userData) {
+        setUser(JSON.parse(userData));
       }
     } catch (e) {
       console.log('No valid session found');
@@ -33,18 +40,42 @@ export const AuthProvider = ({ children }) => {
     const { springToken, firebaseToken, userData } = response.data;
     
     await AsyncStorage.setItem('springToken', springToken);
-    await auth().signInWithCustomToken(firebaseToken);
+    await AsyncStorage.setItem('userData', JSON.stringify(userData));
+    
+    // Only sign in with Firebase if available and token is valid
+    if (firebaseAuth && firebaseToken) {
+      try {
+        await firebaseAuth().signInWithCustomToken(firebaseToken);
+      } catch (fbError) {
+        console.warn('Firebase sign-in failed (non-critical):', fbError.message);
+      }
+    }
+    
     setUser(userData);
   };
 
   const logout = async () => {
     await AsyncStorage.removeItem('springToken');
-    await auth().signOut();
+    await AsyncStorage.removeItem('userData');
+    
+    // Safe Firebase sign out
+    if (firebaseAuth) {
+      try {
+        await firebaseAuth().signOut();
+      } catch (e) {
+        console.warn('Firebase sign-out failed (non-critical):', e.message);
+      }
+    }
+    
     setUser(null);
   };
 
   const deleteAccount = async () => {
-    await axiosClient.delete('/auth/user');
+    try {
+      await axiosClient.delete('/auth/user');
+    } catch (e) {
+      console.warn('Delete account API failed:', e.message);
+    }
     await logout();
   };
 

@@ -95,3 +95,28 @@ yarn-error.log*
 .vscode/
 .DS_Store
 Thumbs.db
+
+# Android Native Build Outputs & C++ Cache
+**/.gradle/
+**/android/.gradle/
+**/android/app/.cxx/
+**/android/app/build/
+**/android/build/
+**/.cxx/
+**/build/
+**/target/
+local.properties
+
+# Node Modules & Dependencies
+**/node_modules/
+
+# Secrets & Keys
+**/serviceAccountKey.json
+*.keystore
+*.jks
+
+# IDE & Temp
+.idea/
+*.txt
+commit_script.py
+*.bak
