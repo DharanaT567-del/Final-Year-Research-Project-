@@ -33,3 +33,7 @@ build/
 
 ### VS Code ###
 .vscode/
+
+**/serviceAccountKey.json
+*.txt
+commit_script.py
