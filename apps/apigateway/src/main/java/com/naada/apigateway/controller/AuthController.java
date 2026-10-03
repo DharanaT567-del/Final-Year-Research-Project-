@@ -8,8 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -78,5 +80,35 @@ public class AuthController {
         }
 
         return ResponseEntity.status(401).body(Map.of("message", "Invalid email or password"));
+    }
+
+    @DeleteMapping("/user")
+    public ResponseEntity<?> deleteUser(@RequestHeader(value = "Authorization", required = false) String authHeader) {
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            return ResponseEntity.status(401).body(Map.of("message", "Unauthorized"));
+        }
+        try {
+            String token = authHeader.substring(7);
+            String email = jwtService.extractEmail(token);
+            Optional<User> userOpt = userRepository.findByEmail(email);
+            
+            if (userOpt.isPresent()) {
+                User user = userOpt.get();
+                
+                if (user.getFirebaseUid() != null && !user.getFirebaseUid().isEmpty()) {
+                    try {
+                        FirebaseAuth.getInstance().deleteUser(user.getFirebaseUid());
+                    } catch (FirebaseAuthException e) {
+                        System.err.println("Firebase user deletion error for UID [" + user.getFirebaseUid() + "]: " + e.getMessage());
+                    }
+                }
+                
+                userRepository.delete(user);
+                return ResponseEntity.ok(Map.of("message", "User deleted successfully"));
+            }
+            return ResponseEntity.status(404).body(Map.of("message", "User not found"));
+        } catch (Exception e) {
+            return ResponseEntity.status(401).body(Map.of("message", "Invalid token"));
+        }
     }
 }
