@@ -1,9 +1,20 @@
 import React, { useContext } from 'react';
-import { View, Text, StyleSheet, SafeAreaView, ScrollView, TouchableOpacity, Image, Platform, StatusBar } from 'react-native';
+import { View, Text, StyleSheet, SafeAreaView, ScrollView, TouchableOpacity, Image, Platform, StatusBar, Alert } from 'react-native';
 import { AuthContext } from '../context/AuthContext';
 
 export default function DashboardScreen({ navigation }) {
-  const { user, logout } = useContext(AuthContext);
+  const { user, logout, deleteAccount } = useContext(AuthContext);
+
+  const handleDeleteAccount = () => {
+    Alert.alert(
+      "Delete Account",
+      "Are you sure you want to permanently delete your account? This action cannot be undone.",
+      [
+        { text: "Cancel", style: "cancel" },
+        { text: "Delete", style: "destructive", onPress: deleteAccount }
+      ]
+    );
+  };
 
   const userName = user?.name || 'Asha Perera';
 
@@ -112,10 +123,20 @@ export default function DashboardScreen({ navigation }) {
           </View>
         </View>
         
-        {/* Temporary Logout Button for Development */}
-        <View style={{ marginTop: 20, marginBottom: 40 }}>
+        {/* Account Settings */}
+        <View style={[styles.sectionHeader, {marginTop: 10}]}>
+          <Text style={styles.sectionTitle}>Account Settings</Text>
+        </View>
+
+        <View style={styles.accountSettingsContainer}>
            <TouchableOpacity onPress={logout} style={styles.logoutButton}>
+             <Text style={styles.logoutIcon}>🚪</Text>
              <Text style={styles.logoutText}>Log Out</Text>
+           </TouchableOpacity>
+
+           <TouchableOpacity onPress={handleDeleteAccount} style={styles.deleteButton}>
+             <Text style={styles.deleteIcon}>⚠️</Text>
+             <Text style={styles.deleteText}>Delete Account</Text>
            </TouchableOpacity>
         </View>
       </ScrollView>
@@ -359,16 +380,49 @@ const styles = StyleSheet.create({
     transform: [{ rotate: '45deg' }],
   },
   progressText: {},
-  logoutButton: {
-    alignSelf: 'center',
+  accountSettingsContainer: {
     paddingHorizontal: 20,
-    paddingVertical: 10,
-    borderRadius: 8,
+    marginBottom: 40,
+    marginTop: 10,
+  },
+  logoutButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#1a1a1a',
+    paddingHorizontal: 20,
+    paddingVertical: 15,
+    borderRadius: 12,
     borderWidth: 1,
     borderColor: '#333',
+    marginBottom: 12,
+  },
+  logoutIcon: {
+    fontSize: 18,
+    marginRight: 10,
   },
   logoutText: {
-    color: '#aaa',
+    color: '#00e5ff',
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  deleteButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#2a1a1a',
+    paddingHorizontal: 20,
+    paddingVertical: 15,
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: '#5a2a2a',
+  },
+  deleteIcon: {
+    fontSize: 18,
+    marginRight: 10,
+  },
+  deleteText: {
+    color: '#ff4d4d',
+    fontSize: 16,
+    fontWeight: '600',
   },
   bottomTabBar: {
     flexDirection: 'row',
