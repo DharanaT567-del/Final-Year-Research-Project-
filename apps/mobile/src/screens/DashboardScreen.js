@@ -19,7 +19,7 @@ export default function DashboardScreen({ navigation }) {
   const userName = user?.name || 'Asha Perera';
 
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       {/* Top Header */}
       <View style={styles.header}>
         <TouchableOpacity>
@@ -34,7 +34,7 @@ export default function DashboardScreen({ navigation }) {
         </TouchableOpacity>
       </View>
 
-      <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
+      <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 100 }}>
         {/* Profile Section */}
         <View style={styles.profileSection}>
           <View style={styles.avatarContainer}>
@@ -160,7 +160,7 @@ export default function DashboardScreen({ navigation }) {
           <Text style={[styles.tabText, {color: '#00e5ff', fontWeight: 'bold'}]}>Profile</Text>
         </TouchableOpacity>
       </View>
-    </SafeAreaView>
+    </View>
   );
 }
 
