@@ -43,7 +43,7 @@ export const AuthProvider = ({ children }) => {
     await AsyncStorage.setItem('userData', JSON.stringify(userData));
     
     // Only sign in with Firebase if available and token is valid
-    if (firebaseAuth && firebaseToken) {
+    if (firebaseAuth && typeof firebaseAuth === 'function' && firebaseToken) {
       try {
         await firebaseAuth().signInWithCustomToken(firebaseToken);
       } catch (fbError) {
@@ -59,7 +59,7 @@ export const AuthProvider = ({ children }) => {
     await AsyncStorage.removeItem('userData');
     
     // Safe Firebase sign out
-    if (firebaseAuth) {
+    if (firebaseAuth && typeof firebaseAuth === 'function') {
       try {
         await firebaseAuth().signOut();
       } catch (e) {
