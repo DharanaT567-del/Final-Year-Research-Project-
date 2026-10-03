@@ -34,7 +34,7 @@ export default function DashboardScreen({ navigation }) {
         </TouchableOpacity>
       </View>
 
-      <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 100 }}>
+      <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 120, flexGrow: 1 }}>
         {/* Profile Section */}
         <View style={styles.profileSection}>
           <View style={styles.avatarContainer}>
@@ -425,6 +425,10 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   bottomTabBar: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
     flexDirection: 'row',
     justifyContent: 'space-around',
     alignItems: 'center',
@@ -432,6 +436,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#0a0a0a',
     borderTopWidth: 1,
     borderTopColor: '#222',
+    paddingBottom: 25,
   },
   tabItem: {
     alignItems: 'center',
