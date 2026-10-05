@@ -131,3 +131,10 @@ venv/
 # ==========================================
 .agents/
 skills/
+skills-lock.json
+
+# Graphify outputs
+graphify-out/
+
+#infra
+infra/
