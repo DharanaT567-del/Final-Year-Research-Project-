@@ -120,3 +120,14 @@ local.properties
 *.txt
 commit_script.py
 *.bak
+
+#Environment Variables
+.env
+*.env
+venv/   
+
+# ==========================================
+# Agent Skills
+# ==========================================
+.agents/
+skills/
