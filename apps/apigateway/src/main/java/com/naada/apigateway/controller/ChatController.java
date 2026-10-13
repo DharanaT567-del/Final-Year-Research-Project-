@@ -40,7 +40,8 @@ public class ChatController {
             @Valid @RequestBody ChatRequestDto request,
             @AuthenticationPrincipal String userEmail) {
 
-        ChatResponseDto response = tutorService.askTutor(userEmail, request.getMessage());
+        String effectiveUser = (userEmail != null && !userEmail.isBlank()) ? userEmail : "student";
+        ChatResponseDto response = tutorService.askTutor(effectiveUser, request.getMessage());
         return ResponseEntity.ok(response);
     }
 
@@ -86,8 +87,14 @@ public class ChatController {
                     || ex.getMessage().toLowerCase().contains("timed out"))) {
             userMessage = "The AI service timed out. Please try again.";
             status = HttpStatus.GATEWAY_TIMEOUT;
+        } else if (ex.getMessage() != null
+                && (ex.getMessage().contains("401")
+                    || ex.getMessage().toLowerCase().contains("unauthenticated")
+                    || ex.getMessage().toLowerCase().contains("invalid authentication credentials"))) {
+            userMessage = "Invalid Gemini API key. Please check your GEMINI_API_KEY in application.properties (Gemini keys start with 'AIzaSy...').";
+            status = HttpStatus.UNAUTHORIZED;
         } else {
-            userMessage = "An error occurred while processing your request.";
+            userMessage = "An error occurred while processing your request: " + (ex.getMessage() != null ? ex.getMessage() : "Unknown error");
             status = HttpStatus.INTERNAL_SERVER_ERROR;
         }
 

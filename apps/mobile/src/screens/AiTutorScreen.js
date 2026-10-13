@@ -70,12 +70,17 @@ export default function AiTutorScreen({ navigation }) {
 
       setMessages((prev) => [...prev, tutorMessage]);
     } catch (error) {
-      const errorMsg =
-        error.response?.data?.message ||
-        error.response?.data?.error ||
-        (error.message === 'Network Error'
-          ? 'Cannot connect to the API Gateway. Ensure your backend server is running on port 8080.'
-          : 'Unable to get an answer from AI Tutor right now. Please try again.');
+      let errorMsg;
+      if (error.response?.status === 401 || error.response?.status === 403) {
+        errorMsg = 'Your session has expired. Please log out from Profile and sign in again.';
+      } else {
+        errorMsg =
+          error.response?.data?.message ||
+          error.response?.data?.error ||
+          (error.message === 'Network Error'
+            ? 'Cannot connect to the API Gateway. Ensure your backend server is running on port 8080.'
+            : 'Unable to get an answer from AI Tutor right now. Please try again.');
+      }
 
       const errorMessage = {
         id: `err-${Date.now()}`,
