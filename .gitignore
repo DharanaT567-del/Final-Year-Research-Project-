@@ -67,6 +67,23 @@ HELP.md
 .env.*
 !.env.example
 
+# Spring Boot Application Properties & YAML Configurations
+application.properties
+application-*.properties
+application.yml
+application-*.yml
+application.yaml
+application-*.yaml
+*.properties.tmp
+!application*.example
+!application*.template
+!application.properties.example
+!application.properties.template
+!application.yml.example
+!application.yml.template
+!application.yaml.example
+!application.yaml.template
+
 # ==========================================
 # IDE & System Files
 # ==========================================
