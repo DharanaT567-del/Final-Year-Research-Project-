@@ -26,7 +26,12 @@ export default function SignupScreen({ navigation }) {
       await axiosClient.post('/auth/signup', { name, email, password });
       await login(email, password);
     } catch (error) {
-      Alert.alert('Signup Error', error.response?.data?.message || 'Registration failed.');
+      const errorMessage =
+        error.response?.data?.message ||
+        (error.message === 'Network Error'
+          ? 'Cannot connect to server. Please check your network and ensure the backend is running.'
+          : 'Registration failed.');
+      Alert.alert('Signup Error', errorMessage);
     } finally {
       setLoading(false);
     }

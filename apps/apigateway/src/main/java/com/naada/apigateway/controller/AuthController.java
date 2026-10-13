@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.naada.apigateway.entity.User;
@@ -61,10 +62,12 @@ public class AuthController {
             String springToken = jwtService.generateToken(user.getEmail());
             String firebaseToken = null;
 
-            try {
-                firebaseToken = FirebaseAuth.getInstance().createCustomToken(user.getFirebaseUid());
-            } catch (FirebaseAuthException e) {
-                System.err.println("Firebase custom token error for UID [" + user.getFirebaseUid() + "]: " + e.getMessage());
+            if (!FirebaseApp.getApps().isEmpty() && user.getFirebaseUid() != null) {
+                try {
+                    firebaseToken = FirebaseAuth.getInstance().createCustomToken(user.getFirebaseUid());
+                } catch (Exception e) {
+                    System.err.println("Firebase custom token error for UID [" + user.getFirebaseUid() + "]: " + e.getMessage());
+                }
             }
 
             Map<String, Object> response = new HashMap<>();
@@ -95,10 +98,10 @@ public class AuthController {
             if (userOpt.isPresent()) {
                 User user = userOpt.get();
                 
-                if (user.getFirebaseUid() != null && !user.getFirebaseUid().isEmpty()) {
+                if (!FirebaseApp.getApps().isEmpty() && user.getFirebaseUid() != null && !user.getFirebaseUid().isEmpty()) {
                     try {
                         FirebaseAuth.getInstance().deleteUser(user.getFirebaseUid());
-                    } catch (FirebaseAuthException e) {
+                    } catch (Exception e) {
                         System.err.println("Firebase user deletion error for UID [" + user.getFirebaseUid() + "]: " + e.getMessage());
                     }
                 }

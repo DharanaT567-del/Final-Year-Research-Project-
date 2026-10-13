@@ -18,7 +18,12 @@ export default function LoginScreen({ navigation }) {
     try {
       await login(email, password);
     } catch (error) {
-      Alert.alert('Login failed', 'Please check your credentials.');
+      const errorMessage =
+        error.response?.data?.message ||
+        (error.message === 'Network Error'
+          ? 'Cannot connect to server. Please check your network and ensure the backend is running.'
+          : 'Login failed. Please check your credentials.');
+      Alert.alert('Login failed', errorMessage);
     } finally {
       setLoading(false);
     }

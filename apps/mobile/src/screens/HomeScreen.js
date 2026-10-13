@@ -33,24 +33,31 @@ export default function HomeScreen({ navigation }) {
           <View style={styles.learningCard}>
             {/* Using a placeholder dark background to simulate the image */}
             <View style={styles.learningCardContent}>
-              <View style={styles.tag}>
-                <View style={styles.dot} />
-                <Text style={styles.tagText}>Currently Learning</Text>
-              </View>
-              <Text style={styles.songTitle}>Ninda Nena Rathriye</Text>
-              <Text style={styles.artistName}>W.D. Amaradeva</Text>
-              <View style={styles.badgesContainer}>
-                <View style={styles.badge}>
-                  <Text style={styles.badgeText}>Intermediate</Text>
-                </View>
-                <View style={styles.badge}>
-                  <Text style={styles.badgeText}>Vocals & Sitar</Text>
+              <View style={styles.cardHeaderRow}>
+                <View style={styles.tag}>
+                  <View style={styles.dot} />
+                  <Text style={styles.tagText}>Currently Learning</Text>
                 </View>
               </View>
-              
-              <TouchableOpacity style={styles.playButton}>
-                <Text style={styles.playIcon}>▶</Text>
-              </TouchableOpacity>
+
+              <View style={styles.cardMainRow}>
+                <View style={styles.cardTextContent}>
+                  <Text style={styles.songTitle} numberOfLines={2}>Ninda Nena Rathriye</Text>
+                  <Text style={styles.artistName}>W.D. Amaradeva</Text>
+                  <View style={styles.badgesContainer}>
+                    <View style={styles.badge}>
+                      <Text style={styles.badgeText}>Intermediate</Text>
+                    </View>
+                    <View style={styles.badge}>
+                      <Text style={styles.badgeText}>Vocals & Sitar</Text>
+                    </View>
+                  </View>
+                </View>
+                
+                <TouchableOpacity style={styles.playButton} activeOpacity={0.85}>
+                  <Text style={styles.playIcon}>▶</Text>
+                </TouchableOpacity>
+              </View>
             </View>
             <View style={styles.progressBarContainer}>
               <View style={styles.progressBarFill} />
@@ -113,7 +120,12 @@ export default function HomeScreen({ navigation }) {
       </ScrollView>
 
       {/* Floating AI Bot Button */}
-      <TouchableOpacity style={styles.fab}>
+      <TouchableOpacity 
+        style={styles.fab}
+        onPress={() => navigation.navigate('AiTutor')}
+        activeOpacity={0.8}
+        accessibilityLabel="Open AI Tutor Chat"
+      >
          <View style={styles.fabGlow}>
            <Text style={styles.fabIcon}>🤖</Text>
          </View>
@@ -237,8 +249,10 @@ const styles = StyleSheet.create({
   },
   learningCardContent: {
     padding: 20,
-    paddingBottom: 40,
     backgroundColor: '#222', // Mock image background
+  },
+  cardHeaderRow: {
+    marginBottom: 12,
   },
   tag: {
     flexDirection: 'row',
@@ -248,7 +262,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 20,
-    marginBottom: 16,
     borderWidth: 1,
     borderColor: '#1a3a42',
   },
@@ -264,27 +277,37 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: '600',
   },
+  cardMainRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  cardTextContent: {
+    flex: 1,
+    marginRight: 16,
+  },
   songTitle: {
-    fontSize: 28,
+    fontSize: 26,
     fontWeight: 'bold',
     color: '#fff',
     marginBottom: 4,
   },
   artistName: {
-    fontSize: 16,
+    fontSize: 15,
     color: '#aaa',
-    marginBottom: 16,
+    marginBottom: 14,
   },
   badgesContainer: {
     flexDirection: 'row',
-    marginBottom: 20,
+    flexWrap: 'wrap',
   },
   badge: {
     backgroundColor: 'rgba(255, 255, 255, 0.1)',
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 12,
-    marginRight: 10,
+    marginRight: 8,
+    marginBottom: 4,
     borderWidth: 1,
     borderColor: 'rgba(255,255,255,0.2)',
   },
@@ -293,22 +316,24 @@ const styles = StyleSheet.create({
     fontSize: 12,
   },
   playButton: {
-    width: 60,
-    height: 60,
-    borderRadius: 30,
+    width: 58,
+    height: 58,
+    borderRadius: 29,
     backgroundColor: '#d6a3ff',
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 3,
     borderColor: '#00e5ff',
-    position: 'absolute',
-    bottom: 20,
-    left: 20,
+    shadowColor: '#00e5ff',
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.6,
+    shadowRadius: 8,
+    elevation: 5,
   },
   playIcon: {
-    fontSize: 24,
+    fontSize: 22,
     color: '#6020a0',
-    marginLeft: 4, // center visually
+    marginLeft: 3, // center visually
   },
   progressBarContainer: {
     height: 4,
