@@ -1,14 +1,21 @@
 Backend/lib/modules
 Backend/lib/src.zip
 
-
 node_modules/
+**/node_modules/
+package-lock.json
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.metro-health-check*
 
 HELP.md
 target/
 .mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
+!**/src/main/**/build/
+!**/src/test/**/build/
 
 ### STS ###
 .apt_generated
@@ -20,7 +27,7 @@ target/
 .sts4-cache
 
 ### IntelliJ IDEA ###
-.idea
+.idea/
 *.iws
 *.iml
 *.ipr
@@ -32,19 +39,23 @@ target/
 /nbdist/
 /.nb-gradle/
 build/
-!**/src/main/**/build/
-!**/src/test/**/build/
 
 ### VS Code ###
 .vscode/
 
-**/serviceAccountKey.json
-*.txt
-commit_script.py
+# Android native build outputs
+**/.gradle/
+**/android/.gradle/
+**/android/app/.cxx/
+**/android/app/build/
+**/android/build/
+**/.cxx/
+local.properties
+*.ninja
+*.ninja_deps
+*.ninja_log
 
-# ==========================================
-# Sensitive Credentials & Private Keys
-# ==========================================
+# Credentials and private keys
 **/serviceAccountKey.json
 *.keystore
 *.jks
@@ -52,78 +63,38 @@ commit_script.py
 *.p12
 *.key
 *.pem
-
-# Environment & Configs with Secrets
 .env
 .env.*
 !.env.example
 
-# ==========================================
-# Temporary & Diagnostic Scripts
-# ==========================================
+# Spring configuration containing secrets
+application.properties
+application-*.properties
+application.yml
+application-*.yml
+application.yaml
+application-*.yaml
+*.properties.tmp
+!application*.example
+!application*.template
+!application.properties.example
+!application.properties.template
+!application.yml.example
+!application.yml.template
+!application.yaml.example
+!application.yaml.template
+
+# Temporary and generated files
+*.txt
 temp_chunk.txt
 untracked_files.txt
 commit_script.py
 *.bak
-
-# ==========================================
-# Android Native Build Outputs & C++ Cache
-# ==========================================
-**/.gradle/
-**/android/.gradle/
-**/android/app/.cxx/
-**/android/app/build/
-**/android/build/
-**/.cxx/
-**/build/
-**/target/
-local.properties
-*.ninja
-*.ninja_deps
-*.ninja_log
-
-# ==========================================
-# Node & JavaScript Bundling
-# ==========================================
-node_modules/
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-.metro-health-check*
-
-# ==========================================
-# IDE & System Files
-# ==========================================
-.idea/
-*.iml
-.vscode/
+venv/
+graphify-out/
+.agents/
+skills/
+skills-lock.json
+infra/
 .DS_Store
 Thumbs.db
-
-# Android Native Build Outputs & C++ Cache
-**/.gradle/
-**/android/.gradle/
-**/android/app/.cxx/
-**/android/app/build/
-**/android/build/
-**/.cxx/
-**/build/
-**/target/
-local.properties
-
-# Node Modules & Dependencies
-**/node_modules/
-
-# Secrets & Keys
-**/serviceAccountKey.json
-*.keystore
-*.jks
-
-# IDE & Temp
-.idea/
-*.txt
-commit_script.py
-*.bak
-
-#Graphify
-graphify-out 
