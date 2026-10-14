@@ -1,86 +1,170 @@
 import React, { createContext, useState, useEffect } from 'react';
+import { 
+  createUserWithEmailAndPassword, 
+  signInWithEmailAndPassword, 
+  signOut, 
+  onAuthStateChanged,
+  sendPasswordResetEmail,
+  updateProfile
+} from 'firebase/auth';
+import { doc, setDoc, getDoc, deleteDoc } from 'firebase/firestore';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import axiosClient from '../api/axiosClient';
-
-// Safe Firebase auth import — may not be configured yet
-let firebaseAuth = null;
-try {
-  const authModule = require('@react-native-firebase/auth');
-  firebaseAuth = authModule.default || authModule;
-} catch (e) {
-  console.warn('Firebase Auth module not available:', e.message);
-}
+import { auth, db } from '../config/firebase';
 
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [token, setToken] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    checkLocalSession();
+    // Listen for Firebase auth state changes across restarts
+    const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
+      try {
+        if (firebaseUser) {
+          const idToken = await firebaseUser.getIdToken();
+          await AsyncStorage.setItem('firebaseToken', idToken);
+          setToken(idToken);
+
+          // Fetch user profile from Firestore if it exists
+          try {
+            const userDoc = await getDoc(doc(db, 'users', firebaseUser.uid));
+            const firestoreData = userDoc.exists() ? userDoc.data() : {};
+
+            setUser({
+              uid: firebaseUser.uid,
+              email: firebaseUser.email,
+              name: firebaseUser.displayName || firestoreData.name || firestoreData.displayName || 'Student',
+              displayName: firebaseUser.displayName || firestoreData.displayName || 'Student',
+              ...firestoreData
+            });
+          } catch (docError) {
+            console.warn('Could not retrieve Firestore profile yet:', docError.message);
+            setUser({
+              uid: firebaseUser.uid,
+              email: firebaseUser.email,
+              name: firebaseUser.displayName || 'Student',
+              displayName: firebaseUser.displayName || 'Student'
+            });
+          }
+        } else {
+          await AsyncStorage.removeItem('firebaseToken');
+          setUser(null);
+          setToken(null);
+        }
+      } catch (err) {
+        console.error('Auth state change error:', err);
+      } finally {
+        setLoading(false);
+      }
+    });
+
+    return unsubscribe;
   }, []);
 
-  const checkLocalSession = async () => {
+  const register = async (name, email, password) => {
+    const credential = await createUserWithEmailAndPassword(auth, email, password);
+    const firebaseUser = credential.user;
+
     try {
-      const token = await AsyncStorage.getItem('springToken');
-      const userData = await AsyncStorage.getItem('userData');
-      if (token && userData) {
-        setUser(JSON.parse(userData));
-      }
-    } catch (e) {
-      console.log('No valid session found');
-    } finally {
-      setIsLoading(false);
+      await updateProfile(firebaseUser, { displayName: name });
+    } catch (profileError) {
+      console.warn('Could not update Firebase displayName:', profileError.message);
     }
+
+    const idToken = await firebaseUser.getIdToken();
+    await AsyncStorage.setItem('firebaseToken', idToken);
+
+    // Save initial user profile in Firestore
+    const profile = {
+      uid: firebaseUser.uid,
+      name: name,
+      displayName: name,
+      email: firebaseUser.email,
+      learningTrack: 'Sinhala Classical',
+      streak: 1,
+      createdAt: new Date().toISOString()
+    };
+
+    try {
+      await setDoc(doc(db, 'users', firebaseUser.uid), profile);
+    } catch (docError) {
+      console.warn('Could not write initial Firestore profile:', docError.message);
+    }
+
+    setUser(profile);
+    setToken(idToken);
+    return profile;
   };
 
   const login = async (email, password) => {
-    const response = await axiosClient.post('/auth/login', { email, password });
-    const { springToken, firebaseToken, userData } = response.data;
-    
-    await AsyncStorage.setItem('springToken', springToken);
-    await AsyncStorage.setItem('userData', JSON.stringify(userData));
-    
-    // Only sign in with Firebase if available and token is valid
-    if (firebaseAuth && typeof firebaseAuth === 'function' && firebaseToken) {
-      try {
-        await firebaseAuth().signInWithCustomToken(firebaseToken);
-      } catch (fbError) {
-        console.warn('Firebase sign-in failed (non-critical):', fbError.message);
-      }
+    const credential = await signInWithEmailAndPassword(auth, email, password);
+    const firebaseUser = credential.user;
+    const idToken = await firebaseUser.getIdToken();
+    await AsyncStorage.setItem('firebaseToken', idToken);
+    setToken(idToken);
+
+    try {
+      const userDoc = await getDoc(doc(db, 'users', firebaseUser.uid));
+      const firestoreData = userDoc.exists() ? userDoc.data() : {};
+      const userData = {
+        uid: firebaseUser.uid,
+        email: firebaseUser.email,
+        name: firebaseUser.displayName || firestoreData.name || firestoreData.displayName || 'Student',
+        displayName: firebaseUser.displayName || firestoreData.displayName || 'Student',
+        ...firestoreData
+      };
+      setUser(userData);
+      return userData;
+    } catch (e) {
+      const basicData = {
+        uid: firebaseUser.uid,
+        email: firebaseUser.email,
+        name: firebaseUser.displayName || 'Student',
+        displayName: firebaseUser.displayName || 'Student'
+      };
+      setUser(basicData);
+      return basicData;
     }
-    
-    setUser(userData);
   };
 
   const logout = async () => {
-    await AsyncStorage.removeItem('springToken');
-    await AsyncStorage.removeItem('userData');
-    
-    // Safe Firebase sign out
-    if (firebaseAuth && typeof firebaseAuth === 'function') {
-      try {
-        await firebaseAuth().signOut();
-      } catch (e) {
-        console.warn('Firebase sign-out failed (non-critical):', e.message);
-      }
-    }
-    
+    await signOut(auth);
+    await AsyncStorage.removeItem('firebaseToken');
     setUser(null);
+    setToken(null);
   };
 
   const deleteAccount = async () => {
-    try {
-      await axiosClient.delete('/auth/user');
-    } catch (e) {
-      console.warn('Delete account API failed:', e.message);
+    if (auth.currentUser) {
+      const currentUid = auth.currentUser.uid;
+      try {
+        await deleteDoc(doc(db, 'users', currentUid));
+      } catch (e) {
+        console.warn('Error deleting user profile from Firestore:', e.message);
+      }
+      await auth.currentUser.delete();
     }
     await logout();
   };
 
+  const resetPassword = async (email) => {
+    await sendPasswordResetEmail(auth, email);
+  };
+
   return (
-    <AuthContext.Provider value={{ user, isLoading, login, logout, deleteAccount }}>
+    <AuthContext.Provider value={{
+      user,
+      token,
+      loading,
+      isLoading: loading,
+      register,
+      login,
+      logout,
+      deleteAccount,
+      resetPassword
+    }}>
       {children}
     </AuthContext.Provider>
   );

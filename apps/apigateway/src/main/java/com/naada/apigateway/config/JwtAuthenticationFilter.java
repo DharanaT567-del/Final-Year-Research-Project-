@@ -3,76 +3,58 @@ package com.naada.apigateway.config;
 import java.io.IOException;
 import java.util.Collections;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseToken;
-import com.naada.apigateway.service.JwtService;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-/**
- * Extracts and validates the token from the Authorization header (supporting
- * both Spring JWT and Firebase ID tokens), then populates the SecurityContext
- * so downstream code can use {@code @AuthenticationPrincipal String userEmail}.
- */
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-    private final JwtService jwtService;
-
-    public JwtAuthenticationFilter(JwtService jwtService) {
-        this.jwtService = jwtService;
-    }
+    private static final Logger log = LoggerFactory.getLogger(JwtAuthenticationFilter.class);
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request,
-                                    HttpServletResponse response,
-                                    FilterChain filterChain)
-            throws ServletException, IOException {
+    protected void doFilterInternal(
+            HttpServletRequest request,
+            HttpServletResponse response,
+            FilterChain filterChain
+    ) throws ServletException, IOException {
 
         String authHeader = request.getHeader("Authorization");
 
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            filterChain.doFilter(request, response);
-            return;
-        }
-
-        try {
+        if (authHeader != null && authHeader.startsWith("Bearer ")) {
             String token = authHeader.substring(7);
-            String email = null;
 
-            // 1. Try Spring JWT token
             try {
-                email = jwtService.extractEmail(token);
-            } catch (Exception e) {
-                // 2. Fallback to Firebase ID token if configured
-                if (!FirebaseApp.getApps().isEmpty()) {
-                    try {
-                        FirebaseToken decoded = FirebaseAuth.getInstance().verifyIdToken(token);
-                        email = decoded.getEmail();
-                    } catch (Exception ignored) {
-                        // neither token matched
-                    }
-                }
-            }
+                // Verify the cryptographic signature and expiration with Firebase
+                FirebaseToken decodedToken = FirebaseAuth.getInstance().verifyIdToken(token);
+                String principal = (decodedToken.getEmail() != null && !decodedToken.getEmail().isBlank())
+                        ? decodedToken.getEmail()
+                        : decodedToken.getUid();
 
-            if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-                UsernamePasswordAuthenticationToken authToken =
-                        new UsernamePasswordAuthenticationToken(email, null, Collections.emptyList());
-                authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                SecurityContextHolder.getContext().setAuthentication(authToken);
+                UsernamePasswordAuthenticationToken authentication =
+                        new UsernamePasswordAuthenticationToken(principal, null, Collections.emptyList());
+                authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+            } catch (Exception e) {
+                log.warn("Invalid Firebase ID token received: {}", e.getMessage());
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                response.setContentType("application/json");
+                response.getWriter().write("{\"error\": \"Unauthorized: Invalid or expired Firebase token\"}");
+                return;
             }
-        } catch (Exception e) {
-            // Token validation failed — continue without authentication.
         }
 
         filterChain.doFilter(request, response);

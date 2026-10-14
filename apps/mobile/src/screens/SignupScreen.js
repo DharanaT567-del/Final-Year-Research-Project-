@@ -1,6 +1,5 @@
 import React, { useState, useContext } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, ActivityIndicator, Alert, Platform, StatusBar } from 'react-native';
-import axiosClient from '../api/axiosClient';
 import { AuthContext } from '../context/AuthContext';
 
 export default function SignupScreen({ navigation }) {
@@ -10,10 +9,10 @@ export default function SignupScreen({ navigation }) {
   const [showPassword, setShowPassword] = useState(false);
   const [agreed, setAgreed] = useState(false);
   const [loading, setLoading] = useState(false);
-  const { login } = useContext(AuthContext);
+  const { register } = useContext(AuthContext);
 
   const handleSignup = async () => {
-    if (!name || !email || !password) {
+    if (!name.trim() || !email.trim() || !password) {
       Alert.alert('Error', 'Please fill in all fields.');
       return;
     }
@@ -23,15 +22,22 @@ export default function SignupScreen({ navigation }) {
     }
     setLoading(true);
     try {
-      await axiosClient.post('/auth/signup', { name, email, password });
-      await login(email, password);
-    } catch (error) {
-      const errorMessage =
-        error.response?.data?.message ||
-        (error.message === 'Network Error'
-          ? 'Cannot connect to server. Please check your network and ensure the backend is running.'
-          : 'Registration failed.');
-      Alert.alert('Signup Error', errorMessage);
+      await register(name.trim(), email.trim(), password);
+      let friendlyMessage = 'Registration failed. Please try again.';
+      const code = error.code || '';
+      const msg = error.message || '';
+      if (code === 'auth/email-already-in-use' || msg.includes('email-already-in-use')) {
+        friendlyMessage = 'An account with this email already exists.';
+      } else if (code === 'auth/invalid-email' || msg.includes('invalid-email')) {
+        friendlyMessage = 'Invalid email address format.';
+      } else if (code === 'auth/weak-password' || msg.includes('weak-password')) {
+        friendlyMessage = 'Password must be at least 6 characters.';
+      } else if (code === 'auth/network-request-failed' || msg.includes('network')) {
+        friendlyMessage = 'Network error. Please check your internet connection.';
+      } else if (error.message) {
+        friendlyMessage = error.message;
+      }
+      Alert.alert('Signup Error', friendlyMessage);
     } finally {
       setLoading(false);
     }
@@ -92,7 +98,7 @@ export default function SignupScreen({ navigation }) {
               secureTextEntry={!showPassword}
             />
             <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
-              <Text style={styles.iconRight}>👁</Text>
+              <Text style={styles.iconRight}>{showPassword ? '🐵' : '👁'}</Text>
             </TouchableOpacity>
           </View>
 

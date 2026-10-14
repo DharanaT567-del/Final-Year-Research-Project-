@@ -7,25 +7,46 @@ export default function LoginScreen({ navigation }) {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const { login } = useContext(AuthContext);
+  const { login, resetPassword } = useContext(AuthContext);
 
   const handleLogin = async () => {
-    if (!email || !password) {
+    if (!email.trim() || !password) {
       Alert.alert('Error', 'Please enter both email and password.');
       return;
     }
     setLoading(true);
     try {
-      await login(email, password);
-    } catch (error) {
-      const errorMessage =
-        error.response?.data?.message ||
-        (error.message === 'Network Error'
-          ? 'Cannot connect to server. Please check your network and ensure the backend is running.'
-          : 'Login failed. Please check your credentials.');
-      Alert.alert('Login failed', errorMessage);
+      await login(email.trim(), password);
+      let friendlyMessage = 'Please check your credentials.';
+      const code = error.code || '';
+      const msg = error.message || '';
+      if (code === 'auth/user-not-found' || code === 'auth/invalid-credential' || msg.includes('invalid-credential') || msg.includes('user-not-found')) {
+        friendlyMessage = 'Invalid email or password.';
+      } else if (code === 'auth/invalid-email' || msg.includes('invalid-email')) {
+        friendlyMessage = 'Please enter a valid email address.';
+      } else if (code === 'auth/too-many-requests' || msg.includes('too-many-requests')) {
+        friendlyMessage = 'Access blocked due to multiple failed attempts. Try again later.';
+      } else if (code === 'auth/network-request-failed' || msg.includes('network')) {
+        friendlyMessage = 'Network error. Please check your internet connection.';
+      }
+      Alert.alert('Login Failed', friendlyMessage);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleForgotPassword = async () => {
+    if (!email.trim()) {
+      Alert.alert('Reset Password', 'Enter your email in the field above first, then tap Forgot Password.');
+      return;
+    }
+    try {
+      if (resetPassword) {
+        await resetPassword(email.trim());
+        Alert.alert('Email Sent', 'Check your inbox for a link to reset your password.');
+      }
+    } catch (error) {
+      Alert.alert('Error', error.message || 'Unable to send reset email.');
     }
   };
 
@@ -62,11 +83,11 @@ export default function LoginScreen({ navigation }) {
               secureTextEntry={!showPassword}
             />
             <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
-              <Text style={styles.iconRight}>👁</Text>
+              <Text style={styles.iconRight}>{showPassword ? '🐵' : '👁'}</Text>
             </TouchableOpacity>
           </View>
 
-          <TouchableOpacity style={styles.forgotPassword}>
+          <TouchableOpacity style={styles.forgotPassword} onPress={handleForgotPassword}>
             <Text style={styles.forgotPasswordText}>Forgot Password?</Text>
           </TouchableOpacity>
 
