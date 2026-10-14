@@ -8,6 +8,36 @@
   --muted: #9392a9;
   --purple: #a78bfa;
   --purple-bright: #8b5cf6;
+  --topbar-bg: #101018;
+  --sidebar-bg: #101018;
+  --input-bg: #15151f;
+  --search-box-bg: #15151f;
+  --shadow-soft: rgba(0, 0, 0, 0.15);
+}
+
+:root[data-theme="light"] {
+  --bg: #eef3ff;
+  --panel: #ffffff;
+  --panel-hover: #f5f7ff;
+  --border: #dfe6f5;
+  --text: #161b2d;
+  --muted: #5c6384;
+  --purple: #7c3aed;
+  --purple-bright: #6d28d9;
+  --topbar-bg: #f6f7fb;
+  --sidebar-bg: #f1f4ff;
+  --input-bg: #ffffff;
+  --search-box-bg: #f2f5fb;
+  --shadow-soft: rgba(81, 98, 140, 0.12);
+}
+
+html {
+  background: var(--bg);
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
 }
 
 #root {
@@ -30,7 +60,7 @@
   flex-direction: column;
   padding: 27px 17px 20px;
   border-right: 1px solid var(--border);
-  background: #101018;
+  background: var(--sidebar-bg);
 }
 
 .brand {
@@ -213,7 +243,7 @@
   gap: 20px;
   padding: 0 38px;
   border-bottom: 1px solid var(--border);
-  background: #101018;
+  background: var(--topbar-bg);
 }
 
 .breadcrumb {
@@ -247,10 +277,10 @@
   width: 225px;
   height: 37px;
   padding: 0 10px;
-  border: 1px solid #2b2a3a;
+  border: 1px solid var(--border);
   border-radius: 8px;
   color: var(--muted);
-  background: #15151f;
+  background: var(--search-box-bg);
 }
 
 .search-box input {
@@ -279,10 +309,20 @@
   place-items: center;
   width: 35px;
   height: 35px;
-  border: 1px solid #2b2a3a;
+  border: 1px solid var(--border);
   border-radius: 9px;
-  color: #b7b4cb;
-  background: #15151f;
+  color: var(--text);
+  background: var(--input-bg);
+  transition: transform 160ms ease, border-color 160ms ease;
+}
+
+.icon-button:hover {
+  border-color: var(--purple);
+  transform: translateY(-1px);
+}
+
+.theme-toggle {
+  cursor: pointer;
 }
 
 .notification-dot {
@@ -331,6 +371,15 @@
 
 .profile-menu > svg {
   color: var(--muted);
+}
+
+body a,
+body button,
+body input,
+body textarea,
+body select {
+  transition: background-color 160ms ease, color 160ms ease, border-color 160ms ease,
+    box-shadow 160ms ease;
 }
 
 .page-content {
@@ -2501,6 +2550,125 @@ button {
   }
 }
 
+:root[data-theme="light"] {
+  --page-surface: #f7f9ff;
+  --card-bg: #ffffff;
+  --card-soft: #edf3ff;
+  --soft-panel: #f3f6ff;
+  --text-strong: #171f32;
+  --text-soft: #53607a;
+  --purple-soft: rgba(124, 58, 237, 0.12);
+}
+
+:root[data-theme="dark"] {
+  --page-surface: #0c0c12;
+  --card-bg: #13131d;
+  --card-soft: #11121a;
+  --soft-panel: #171824;
+  --text-strong: #f0eff8;
+  --text-soft: #a19fb5;
+  --purple-soft: rgba(167, 139, 250, 0.12);
+}
+
+:root[data-theme="light"] .dashboard,
+:root[data-theme="light"] .lyrics-page,
+:root[data-theme="light"] .page-content,
+:root[data-theme="light"] .upload-card,
+:root[data-theme="light"] .history-card,
+:root[data-theme="light"] .song-card,
+:root[data-theme="light"] .feature-card,
+:root[data-theme="light"] .stat-card,
+:root[data-theme="light"] .result-song-card,
+:root[data-theme="light"] .result-summary,
+:root[data-theme="light"] .transcription-card,
+:root[data-theme="light"] .next-steps-card,
+:root[data-theme="light"] .workflow-step,
+:root[data-theme="light"] .section-block,
+:root[data-theme="light"] .processing-notice,
+:root[data-theme="light"] .demo-note,
+:root[data-theme="light"] .welcome-note,
+:root[data-theme="light"] .hero-card {
+  background: var(--card-bg);
+  border-color: var(--border);
+  color: var(--text);
+}
+
+:root[data-theme="light"] .welcome-description,
+:root[data-theme="light"] .welcome-note,
+:root[data-theme="light"] .page-intro > p,
+:root[data-theme="light"] .welcome-row h1,
+:root[data-theme="light"] .welcome-row h1 span,
+:root[data-theme="light"] .section-block p,
+:root[data-theme="light"] .song-details p,
+:root[data-theme="light"] .component-heading p,
+:root[data-theme="light"] .transcription-placeholder p,
+:root[data-theme="light"] .summary-row > span,
+:root[data-theme="light"] .history-song-info p,
+:root[data-theme="light"] .field-group > span,
+:root[data-theme="light"] .level-option p,
+:root[data-theme="light"] .hero-content p,
+:root[data-theme="light"] .processing-notice p,
+:root[data-theme="light"] .dropzone span,
+:root[data-theme="light"] .dropzone small,
+:root[data-theme="light"] .stage-text,
+:root[data-theme="light"] .settings-link {
+  color: var(--text-soft);
+}
+
+:root[data-theme="light"] .feature-card,
+:root[data-theme="light"] .song-card,
+:root[data-theme="light"] .stat-card,
+:root[data-theme="light"] .upload-card,
+:root[data-theme="light"] .history-card,
+:root[data-theme="light"] .result-song-card,
+:root[data-theme="light"] .result-summary,
+:root[data-theme="light"] .transcription-card,
+:root[data-theme="light"] .next-steps-card,
+:root[data-theme="light"] .workflow-step,
+:root[data-theme="light"] .section-block,
+:root[data-theme="light"] .processing-notice,
+:root[data-theme="light"] .welcome-note,
+:root[data-theme="light"] .hero-card {
+  box-shadow: 0 10px 28px var(--shadow-soft);
+}
+
+:root[data-theme="light"] .nav-link {
+  color: #4d5876;
+}
+
+:root[data-theme="light"] .nav-link:hover {
+  background: rgba(124, 58, 237, 0.07);
+  color: #1f2a3d;
+}
+
+:root[data-theme="light"] .nav-link.active {
+  background: linear-gradient(100deg, #efe7ff, #e8edff);
+  color: #4c1d95;
+  box-shadow: inset 2px 0 #8b5cf6;
+}
+
+:root[data-theme="light"] .search-box input {
+  color: var(--text);
+}
+
+:root[data-theme="light"] .search-box input::placeholder {
+  color: #7a859d;
+}
+
+:root[data-theme="light"] .hero-card {
+  background: linear-gradient(120deg, #f4ecff 0%, #eaf1ff 45%, #f3f5ff 100%);
+  border-color: #d8c9ff;
+}
+
+:root[data-theme="light"] .welcome-note {
+  background: var(--card-soft);
+  color: var(--text-strong);
+}
+
+:root[data-theme="light"] .dashboard-footer {
+  color: var(--text-soft);
+}
+
 /* PP1 lyrics pages — layout safeguards */
 
 .page-content {
@@ -2591,4 +2759,384 @@ button {
   .history-item {
     flex-wrap: wrap;
   }
+}
+
+.main-area {
+  flex: 1;
+  min-width: 0;
+  position: relative;
+}
+
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  backdrop-filter: blur(8px);
+}
+
+:root[data-theme="light"] .breadcrumb strong {
+  color: var(--text);
+}
+
+:root[data-theme="light"] body,
+:root[data-theme="light"] .main-area,
+:root[data-theme="light"] .page-content,
+:root[data-theme="light"] .dashboard,
+:root[data-theme="light"] .lyrics-page,
+:root[data-theme="light"] .upload-card,
+:root[data-theme="light"] .history-card,
+:root[data-theme="light"] .song-card,
+:root[data-theme="light"] .feature-card,
+:root[data-theme="light"] .stat-card,
+:root[data-theme="light"] .result-song-card,
+:root[data-theme="light"] .result-summary,
+:root[data-theme="light"] .transcription-card,
+:root[data-theme="light"] .next-steps-card,
+:root[data-theme="light"] .workflow-step,
+:root[data-theme="light"] .processing-notice,
+:root[data-theme="light"] .demo-note,
+:root[data-theme="light"] .welcome-note,
+:root[data-theme="light"] .hero-card,
+:root[data-theme="light"] .dropzone,
+:root[data-theme="light"] .language-display,
+:root[data-theme="light"] .selected-audio,
+:root[data-theme="light"] .summary-note,
+:root[data-theme="light"] .transcription-placeholder,
+:root[data-theme="light"] .level-option,
+:root[data-theme="light"] .empty-results {
+  background: var(--card-bg);
+  color: var(--text);
+}
+
+:root[data-theme="light"] .page-intro h1,
+:root[data-theme="light"] .welcome-row h1,
+:root[data-theme="light"] .welcome-row h1 span,
+:root[data-theme="light"] .eyebrow,
+:root[data-theme="light"] .section-heading h2,
+:root[data-theme="light"] .song-title-row h3,
+:root[data-theme="light"] .feature-card h3,
+:root[data-theme="light"] .component-heading h3,
+:root[data-theme="light"] .result-song-info h2,
+:root[data-theme="light"] .history-song-info strong,
+:root[data-theme="light"] .stat-copy > strong,
+:root[data-theme="light"] .level-option strong,
+:root[data-theme="light"] .language-display strong,
+:root[data-theme="light"] .hero-content h2,
+:root[data-theme="light"] .page-intro h1 span,
+:root[data-theme="light"] .processing-notice strong,
+:root[data-theme="light"] .demo-status,
+:root[data-theme="light"] .pipeline-item strong,
+:root[data-theme="light"] .empty-results h1 {
+  color: var(--text);
+}
+
+:root[data-theme="light"] .welcome-description,
+:root[data-theme="light"] .component-heading p,
+:root[data-theme="light"] .summary-row > span,
+:root[data-theme="light"] .pipeline-item p,
+:root[data-theme="light"] .history-song-info span,
+:root[data-theme="light"] .history-song-info small,
+:root[data-theme="light"] .song-title-row p,
+:root[data-theme="light"] .stat-copy > span,
+:root[data-theme="light"] .stat-copy > small,
+:root[data-theme="light"] .feature-card p,
+:root[data-theme="light"] .demo-note,
+:root[data-theme="light"] .page-intro > p,
+:root[data-theme="light"] .transcription-placeholder p,
+:root[data-theme="light"] .field-group > span,
+:root[data-theme="light"] .level-option p,
+:root[data-theme="light"] .language-display p,
+:root[data-theme="light"] .settings-link,
+:root[data-theme="light"] .dashboard-footer,
+:root[data-theme="light"] .processing-notice p,
+:root[data-theme="light"] .result-song-info p,
+:root[data-theme="light"] .file-name,
+:root[data-theme="light"] .empty-results p {
+  color: var(--muted);
+}
+
+:root[data-theme="light"] .search-box input,
+:root[data-theme="light"] .field-group input,
+:root[data-theme="light"] .level-option,
+:root[data-theme="light"] .dropzone,
+:root[data-theme="light"] .theme-toggle,
+:root[data-theme="light"] .icon-button {
+  color: var(--text);
+}
+
+:root[data-theme="light"] .field-group input,
+:root[data-theme="light"] .search-box,
+:root[data-theme="light"] .search-box input,
+:root[data-theme="light"] .icon-button,
+:root[data-theme="light"] .selected-audio,
+:root[data-theme="light"] .summary-note,
+:root[data-theme="light"] .transcription-placeholder,
+:root[data-theme="light"] .language-display,
+:root[data-theme="light"] .level-option,
+:root[data-theme="light"] .dropzone {
+  background: var(--input-bg);
+  border-color: var(--border);
+}
+
+:root[data-theme="light"] .topbar,
+:root[data-theme="light"] .sidebar {
+  background: var(--topbar-bg);
+  border-color: var(--border);
+}
+
+:root[data-theme="light"] .hero-card {
+  background: linear-gradient(120deg, #f4ecff 0%, #eaf1ff 45%, #f3f5ff 100%);
+  border-color: #d8c9ff;
+}
+
+:root[data-theme="light"] .nav-link {
+  color: #4d5876;
+}
+
+:root[data-theme="light"] .nav-link:hover {
+  background: rgba(124, 58, 237, 0.07);
+  color: #1f2a3d;
+}
+
+:root[data-theme="light"] .nav-link.active {
+  background: linear-gradient(100deg, #efe7ff, #e8edff);
+  color: #4c1d95;
+  box-shadow: inset 2px 0 #8b5cf6;
+}
+
+:root[data-theme="light"] .search-box input::placeholder {
+  color: #7a859d;
+}
+
+:root[data-theme="light"] .notification-dot {
+  border-color: #f4f7ff;
+}
+
+:root[data-theme="light"] .dashboard-footer {
+  color: var(--text-soft);
+}
+.notifications-page {
+  max-width: 760px;
+}
+
+.notifications-card {
+  padding: 24px;
+}
+
+.notification-list {
+  display: grid;
+  gap: 14px;
+}
+
+.notification-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 15px 0;
+  border-top: 1px solid var(--border);
+}
+
+.notification-item:first-child {
+  border-top: 0;
+  padding-top: 0;
+}
+
+.notification-icon {
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  border-radius: 12px;
+  flex-shrink: 0;
+}
+
+.notification-icon.info {
+  background: rgba(124, 58, 237, 0.12);
+  color: #8b5cf6;
+}
+
+.notification-icon.highlight {
+  background: rgba(59, 130, 246, 0.12);
+  color: #60a5fa;
+}
+
+.notification-icon.success {
+  background: rgba(34, 197, 94, 0.12);
+  color: #34d399;
+}
+
+.notification-copy {
+  flex: 1;
+  min-width: 0;
+}
+
+.notification-topline {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.notification-topline strong {
+  font-size: 12px;
+}
+
+.notification-topline span {
+  color: var(--muted);
+  font-size: 9px;
+}
+
+.notification-copy p {
+  margin: 8px 0 0;
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.8;
+}
+
+:root[data-theme="light"] .lyrics-page .dropzone {
+  color: var(--text);
+  background: #f7f8fc;
+  border-color: #cbd3e3;
+}
+
+:root[data-theme="light"] .lyrics-page .dropzone:hover {
+  background: #f0edff;
+  border-color: var(--purple);
+}
+
+:root[data-theme="light"] .lyrics-page .dropzone > strong {
+  color: var(--text);
+}
+
+:root[data-theme="light"] .lyrics-page .dropzone > span:not(.upload-icon),
+:root[data-theme="light"] .lyrics-page .dropzone small {
+  color: var(--muted);
+}
+
+:root[data-theme="light"] .lyrics-page .field-group input {
+  color: var(--text);
+  background: #fff;
+  border-color: var(--border);
+}
+
+:root[data-theme="light"] .lyrics-page .field-group input::placeholder {
+  color: #737c91;
+}
+
+:root[data-theme="light"] .lyrics-page .field-group input:focus {
+  border-color: var(--purple);
+  box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.12);
+}
+
+:root[data-theme="light"] .lyrics-page .level-option {
+  color: var(--text);
+  background: #fff;
+  border-color: var(--border);
+}
+
+:root[data-theme="light"] .lyrics-page .level-option:hover {
+  background: #f7f5ff;
+  border-color: #b8a5ed;
+}
+
+:root[data-theme="light"] .lyrics-page .level-option.selected {
+  color: #3f2875;
+  background: #f2edff;
+  border-color: var(--purple);
+}
+
+:root[data-theme="light"] .lyrics-page .level-option.selected strong,
+:root[data-theme="light"] .lyrics-page .level-option.selected > svg {
+  color: #5b35a2;
+}
+
+:root[data-theme="light"] .lyrics-page .level-option p {
+  color: var(--muted);
+}
+
+:root[data-theme="light"] .lyrics-page .processing-notice {
+  color: #46536d;
+  background: #f1f5fb;
+  border-color: #d8e0ee;
+}
+
+:root[data-theme="light"] .lyrics-page .processing-notice > svg {
+  color: var(--purple);
+}
+
+:root[data-theme="light"] .lyrics-page .processing-notice strong {
+  color: #2d3650;
+}
+
+:root[data-theme="light"] .lyrics-page .secondary-button {
+  color: #39445c;
+  background: #fff;
+  border-color: var(--border);
+}
+
+:root[data-theme="light"] .lyrics-page .secondary-button:hover {
+  color: #34215f;
+  background: #f6f3ff;
+  border-color: #b8a5ed;
+}
+
+:root[data-theme="light"] .lyrics-page .workflow-steps {
+  color: var(--text);
+  background: #fff;
+  border-color: var(--border);
+}
+
+:root[data-theme="light"] .lyrics-page .workflow-step > span {
+  color: #58627a;
+  background: #f1f4fa;
+  border-color: #d8deeb;
+}
+
+:root[data-theme="light"] .lyrics-page .workflow-step.active > span {
+  color: #fff;
+  background: #7549ce;
+  border-color: #7549ce;
+}
+
+:root[data-theme="light"] .lyrics-page .workflow-connector {
+  background: #d8deeb;
+}
+
+:root[data-theme="light"] .lyrics-page .dropzone {
+  color: var(--text) !important;
+  background-color: #f7f8fc !important;
+  border-color: #cbd3e3 !important;
+}
+
+:root[data-theme="light"] .lyrics-page .dropzone > strong {
+  color: var(--text) !important;
+}
+
+:root[data-theme="light"] .lyrics-page .dropzone > span:not(.upload-icon),
+:root[data-theme="light"] .lyrics-page .dropzone small {
+  color: var(--muted) !important;
+}
+
+:root[data-theme="light"] .lyrics-page .field-group input {
+  color: var(--text) !important;
+  background-color: #fff !important;
+  border-color: var(--border) !important;
+}
+
+:root[data-theme="light"] .lyrics-page .level-option {
+  color: var(--text) !important;
+  background-color: #fff !important;
+  border-color: var(--border) !important;
+}
+
+:root[data-theme="light"] .lyrics-page .level-option.selected {
+  color: #3f2875 !important;
+  background-color: #f2edff !important;
+  border-color: var(--purple) !important;
+}
+
+:root[data-theme="light"] .lyrics-page .secondary-button {
+  color: #39445c !important;
+  background-color: #fff !important;
+  border-color: var(--border) !important;
 }

@@ -6,6 +6,7 @@ import Dashboard from "./pages/Dashboard";
 import LyricsProcessing from "./pages/LyricsProcessing";
 import LyricsResults from "./pages/LyricsResults";
 import History from "./pages/History";
+import Notifications from "./pages/Notifications";
 import "./App.css";
 
 function AppLayout() {
@@ -20,6 +21,7 @@ function AppLayout() {
             <Route path="/process" element={<LyricsProcessing />} />
             <Route path="/results" element={<LyricsResults />} />
             <Route path="/history" element={<History />} />
+            <Route path="/notifications" element={<Notifications />} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </main>
