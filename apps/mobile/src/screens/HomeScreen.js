@@ -8,7 +8,7 @@ export default function HomeScreen({ navigation }) {
       <View style={styles.header}>
         <View style={styles.headerLeft}>
           <Image source={{ uri: 'https://i.pravatar.cc/150?img=11' }} style={styles.profileAvatar} />
-          <Text style={styles.headerLogo}>BeatAcademy</Text>
+          <Text style={styles.headerLogo}>Naada</Text>
         </View>
         <View style={styles.headerRight}>
           <View style={styles.streakBadge}>

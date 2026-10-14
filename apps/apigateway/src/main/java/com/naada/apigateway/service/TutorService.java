@@ -49,16 +49,23 @@ public class TutorService {
             logger.debug("VectorStore bean unavailable: {}", e.getMessage());
         }
 
-        if (builder != null && store != null) {
-            this.chatClient = builder
-                    .defaultSystem(SYSTEM_PROMPT)
-                    .defaultAdvisors(
+        if (builder != null) {
+            ChatClient.Builder configuredBuilder = builder.defaultSystem(SYSTEM_PROMPT);
+            if (store != null) {
+                try {
+                    configuredBuilder = configuredBuilder.defaultAdvisors(
                             QuestionAnswerAdvisor.builder(store)
                                     .searchRequest(SearchRequest.builder().topK(2).build())
                                     .build()
-                    )
-                    .build();
-            logger.info("Naada AI Tutor initialized with RAG pipeline (Pinecone + Gemini).");
+                    );
+                    logger.info("Naada AI Tutor initialized with RAG pipeline (Pinecone + Gemini).");
+                } catch (Exception e) {
+                    logger.warn("Could not attach Pinecone advisor, falling back to direct Gemini: {}", e.getMessage());
+                }
+            } else {
+                logger.info("Naada AI Tutor initialized with direct Gemini LLM.");
+            }
+            this.chatClient = configuredBuilder.build();
         } else {
             this.chatClient = null;
             logger.warn("Naada AI Tutor DISABLED — set GEMINI_API_KEY and PINECONE_API_KEY to enable.");

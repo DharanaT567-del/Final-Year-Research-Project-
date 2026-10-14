@@ -23,9 +23,10 @@ export default function SignupScreen({ navigation }) {
     setLoading(true);
     try {
       await register(name.trim(), email.trim(), password);
+    } catch (error) {
       let friendlyMessage = 'Registration failed. Please try again.';
-      const code = error.code || '';
-      const msg = error.message || '';
+      const code = error?.code || '';
+      const msg = error?.message || '';
       if (code === 'auth/email-already-in-use' || msg.includes('email-already-in-use')) {
         friendlyMessage = 'An account with this email already exists.';
       } else if (code === 'auth/invalid-email' || msg.includes('invalid-email')) {
@@ -34,7 +35,7 @@ export default function SignupScreen({ navigation }) {
         friendlyMessage = 'Password must be at least 6 characters.';
       } else if (code === 'auth/network-request-failed' || msg.includes('network')) {
         friendlyMessage = 'Network error. Please check your internet connection.';
-      } else if (error.message) {
+      } else if (error?.message) {
         friendlyMessage = error.message;
       }
       Alert.alert('Signup Error', friendlyMessage);

@@ -58,8 +58,12 @@ export default function AiTutorScreen({ navigation }) {
     setLoading(true);
 
     try {
-      const response = await axiosClient.post('/v1/tutor/chat', { message: text });
-      const replyText = response.data?.reply || 'No response received from tutor.';
+      // Corrected API endpoint route to /api/v1/tutor/chat
+      const response = await axiosClient.post('/api/v1/tutor/chat', { 
+        message: text 
+      });
+
+      const replyText = response.data?.reply || response.data?.response || 'No response received from tutor.';
 
       const tutorMessage = {
         id: `tutor-${Date.now()}`,
@@ -72,7 +76,7 @@ export default function AiTutorScreen({ navigation }) {
     } catch (error) {
       let errorMsg;
       if (error.response?.status === 401 || error.response?.status === 403) {
-        errorMsg = 'Your session has expired. Please log out from Profile and sign in again.';
+        errorMsg = 'Your session has expired or is unauthorized. Please log out and sign in again.';
       } else {
         errorMsg =
           error.response?.data?.message ||

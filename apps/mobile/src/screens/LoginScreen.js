@@ -17,9 +17,10 @@ export default function LoginScreen({ navigation }) {
     setLoading(true);
     try {
       await login(email.trim(), password);
+    } catch (error) {
       let friendlyMessage = 'Please check your credentials.';
-      const code = error.code || '';
-      const msg = error.message || '';
+      const code = error?.code || '';
+      const msg = error?.message || '';
       if (code === 'auth/user-not-found' || code === 'auth/invalid-credential' || msg.includes('invalid-credential') || msg.includes('user-not-found')) {
         friendlyMessage = 'Invalid email or password.';
       } else if (code === 'auth/invalid-email' || msg.includes('invalid-email')) {
@@ -28,6 +29,8 @@ export default function LoginScreen({ navigation }) {
         friendlyMessage = 'Access blocked due to multiple failed attempts. Try again later.';
       } else if (code === 'auth/network-request-failed' || msg.includes('network')) {
         friendlyMessage = 'Network error. Please check your internet connection.';
+      } else if (error?.message) {
+        friendlyMessage = error.message;
       }
       Alert.alert('Login Failed', friendlyMessage);
     } finally {
