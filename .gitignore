@@ -120,3 +120,6 @@ local.properties
 *.txt
 commit_script.py
 *.bak
+
+#Graphify
+graphify-out 
