@@ -19,7 +19,7 @@ const axiosClient = axios.create({
 });
 
 axiosClient.interceptors.request.use(async (config) => {
-  const token = await AsyncStorage.getItem('springToken');
+  const token = (await AsyncStorage.getItem('firebaseToken')) || (await AsyncStorage.getItem('springToken'));
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
