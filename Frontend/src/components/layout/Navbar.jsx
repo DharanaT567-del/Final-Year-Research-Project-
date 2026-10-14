@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useLayoutEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Bell, Search, ChevronDown, Sun, Moon } from "lucide-react";
 
@@ -16,7 +16,7 @@ const getInitialTheme = () => {
 export default function Navbar() {
   const [theme, setTheme] = useState(getInitialTheme);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     document.documentElement.setAttribute("data-theme", theme);
     localStorage.setItem("naada-theme", theme);
   }, [theme]);
