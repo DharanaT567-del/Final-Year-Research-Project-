@@ -98,3 +98,4 @@ skills-lock.json
 infra/
 .DS_Store
 Thumbs.db
+apps/mobile/NLPModel/**/optimizer.pt

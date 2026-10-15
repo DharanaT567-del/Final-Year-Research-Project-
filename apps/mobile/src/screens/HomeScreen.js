@@ -85,7 +85,13 @@ export default function HomeScreen({ navigation }) {
             <Text style={styles.toolSubtitle}>Upload & decompose tracks</Text>
           </View>
           
-          <View style={styles.toolCard}>
+          <TouchableOpacity
+            style={styles.toolCard}
+            onPress={() => navigation.navigate('SongProcessing')}
+            activeOpacity={0.82}
+            accessibilityRole="button"
+            accessibilityLabel="Open Smart Lyrics"
+          >
             <View style={styles.toolHeader}>
                <View style={styles.iconContainer}>
                  <Text style={styles.toolIcon}>A文</Text>
@@ -96,7 +102,7 @@ export default function HomeScreen({ navigation }) {
             </View>
             <Text style={styles.toolTitle}>Smart Lyrics</Text>
             <Text style={styles.toolSubtitle}>Translate & simplify lyrics</Text>
-          </View>
+          </TouchableOpacity>
         </View>
 
         {/* Suggested Sinhala Classical */}
