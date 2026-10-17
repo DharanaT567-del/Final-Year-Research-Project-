@@ -107,6 +107,11 @@ commit_script.py
 # Python
 # ==========================================
 venv/
+.venv/
+__pycache__/
+*.pyc
+ingestion_checkpoint.json
+checkpoint_*.json
 
 # ==========================================
 # Agent Skills
