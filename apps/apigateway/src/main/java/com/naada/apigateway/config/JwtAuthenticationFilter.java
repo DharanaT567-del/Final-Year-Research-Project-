@@ -2,6 +2,8 @@ package com.naada.apigateway.config;
 
 import java.io.IOException;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,7 +47,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
                 UsernamePasswordAuthenticationToken authentication =
                         new UsernamePasswordAuthenticationToken(principal, null, Collections.emptyList());
-                authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                
+                // Store decoded token claims or UID in details for controllers/services
+                Map<String, Object> details = new HashMap<>();
+                details.put("uid", decodedToken.getUid());
+                details.put("email", decodedToken.getEmail());
+                details.put("name", decodedToken.getName());
+                details.put("claims", decodedToken.getClaims());
+                authentication.setDetails(details);
 
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             } catch (Exception e) {

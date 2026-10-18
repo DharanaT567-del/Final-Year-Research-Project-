@@ -16,7 +16,8 @@ export default function DashboardScreen({ navigation }) {
     );
   };
 
-  const userName = user?.name || 'Asha Perera';
+  const userName = user?.name || user?.displayName || 'Asha Perera';
+  const userAvatar = user?.photoURL || user?.profileImage || 'https://i.pravatar.cc/150?img=47';
 
   return (
     <View style={styles.container}>
@@ -39,16 +40,25 @@ export default function DashboardScreen({ navigation }) {
         <View style={styles.profileSection}>
           <View style={styles.avatarContainer}>
             <Image 
-              source={{ uri: 'https://i.pravatar.cc/150?img=47' }} // Random placeholder matching a female profile
+              source={{ uri: userAvatar }}
               style={styles.avatar} 
             />
             <View style={styles.avatarGlow} />
-            <TouchableOpacity style={styles.settingsIconContainer}>
-              <Text style={styles.settingsIcon}>⚙</Text>
+            <TouchableOpacity 
+              style={styles.settingsIconContainer}
+              onPress={() => navigation.navigate('EditProfile')}
+            >
+              <Text style={styles.settingsIcon}>✏️</Text>
             </TouchableOpacity>
           </View>
           <Text style={styles.userName}>{userName}</Text>
           <Text style={styles.userLevel}>Level 7 - Intermediate</Text>
+          <TouchableOpacity 
+            style={styles.editProfileButton}
+            onPress={() => navigation.navigate('EditProfile')}
+          >
+            <Text style={styles.editProfileButtonText}>Edit Profile</Text>
+          </TouchableOpacity>
           <View style={styles.progressBarContainer}>
             <View style={styles.progressBarFill} />
           </View>
@@ -260,7 +270,21 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#00e5ff',
     fontWeight: '600',
+    marginBottom: 10,
+  },
+  editProfileButton: {
+    backgroundColor: '#1f1a2e',
+    paddingHorizontal: 16,
+    paddingVertical: 6,
+    borderRadius: 20,
+    borderWidth: 1,
+    borderColor: '#c074ff',
     marginBottom: 15,
+  },
+  editProfileButtonText: {
+    color: '#e0c8ff',
+    fontSize: 13,
+    fontWeight: '600',
   },
   progressBarContainer: {
     width: '60%',

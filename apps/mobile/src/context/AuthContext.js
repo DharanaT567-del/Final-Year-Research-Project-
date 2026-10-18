@@ -5,7 +5,11 @@ import {
   signOut, 
   onAuthStateChanged,
   sendPasswordResetEmail,
-  updateProfile
+  updateProfile,
+  updateEmail,
+  updatePassword,
+  reauthenticateWithCredential,
+  EmailAuthProvider
 } from 'firebase/auth';
 import { doc, setDoc, getDoc, deleteDoc } from 'firebase/firestore';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -153,6 +157,48 @@ export const AuthProvider = ({ children }) => {
     await sendPasswordResetEmail(auth, email);
   };
 
+  const updateUserProfileState = (updatedData) => {
+    setUser((prev) => ({
+      ...prev,
+      ...updatedData
+    }));
+  };
+
+  const updateUserEmailAddress = async (newEmail, currentPassword) => {
+    const currentUser = auth.currentUser;
+    if (!currentUser) throw new Error("No active user session");
+
+    if (currentPassword) {
+      const credential = EmailAuthProvider.credential(currentUser.email, currentPassword);
+      await reauthenticateWithCredential(currentUser, credential);
+    }
+
+    await updateEmail(currentUser, newEmail);
+    const idToken = await currentUser.getIdToken(true);
+    await AsyncStorage.setItem('firebaseToken', idToken);
+    setToken(idToken);
+
+    setUser((prev) => ({
+      ...prev,
+      email: newEmail
+    }));
+  };
+
+  const updateUserPasswordCredential = async (newPassword, currentPassword) => {
+    const currentUser = auth.currentUser;
+    if (!currentUser) throw new Error("No active user session");
+
+    if (currentPassword) {
+      const credential = EmailAuthProvider.credential(currentUser.email, currentPassword);
+      await reauthenticateWithCredential(currentUser, credential);
+    }
+
+    await updatePassword(currentUser, newPassword);
+    const idToken = await currentUser.getIdToken(true);
+    await AsyncStorage.setItem('firebaseToken', idToken);
+    setToken(idToken);
+  };
+
   return (
     <AuthContext.Provider value={{
       user,
@@ -163,7 +209,10 @@ export const AuthProvider = ({ children }) => {
       login,
       logout,
       deleteAccount,
-      resetPassword
+      resetPassword,
+      updateUserProfileState,
+      updateUserEmailAddress,
+      updateUserPasswordCredential
     }}>
       {children}
     </AuthContext.Provider>

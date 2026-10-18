@@ -1,21 +1,29 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { View, Text, StyleSheet, SafeAreaView, ScrollView, TouchableOpacity, ImageBackground, Image, Platform, StatusBar } from 'react-native';
+import { AuthContext } from '../context/AuthContext';
 
 export default function HomeScreen({ navigation }) {
+  const { user } = useContext(AuthContext);
+  const userAvatar = user?.photoURL || user?.profileImage || 'https://i.pravatar.cc/150?img=11';
+
   return (
     <View style={styles.container}>
       {/* Top Header */}
       <View style={styles.header}>
-        <View style={styles.headerLeft}>
-          <Image source={{ uri: 'https://i.pravatar.cc/150?img=11' }} style={styles.profileAvatar} />
+        <TouchableOpacity 
+          style={styles.headerLeft} 
+          onPress={() => navigation.navigate('Dashboard')}
+          activeOpacity={0.8}
+        >
+          <Image source={{ uri: userAvatar }} style={styles.profileAvatar} />
           <Text style={styles.headerLogo}>Naada</Text>
-        </View>
+        </TouchableOpacity>
         <View style={styles.headerRight}>
           <View style={styles.streakBadge}>
             <Text style={styles.streakIcon}>🔥</Text>
             <Text style={styles.streakText}>7</Text>
           </View>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.navigate('EditProfile')}>
             <Text style={styles.settingsIcon}>⚙</Text>
           </TouchableOpacity>
         </View>
