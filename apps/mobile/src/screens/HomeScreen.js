@@ -1,165 +1,141 @@
-import React from 'react';
-import { View, Text, StyleSheet, SafeAreaView, ScrollView, TouchableOpacity, ImageBackground, Image, Platform, StatusBar } from 'react-native';
+import React, { useContext, useEffect, useState } from 'react';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, TextInput, Platform, StatusBar } from 'react-native';
+import { AuthContext } from '../context/AuthContext';
+import PrimaryTabBar from '../components/PrimaryTabBar';
+import { getSongs } from '../services/songLibraryService';
+import { getLearnerProgress } from '../services/learnerProgressService';
+import { lyricsTheme } from '../theme/lyricsTheme';
 
 export default function HomeScreen({ navigation }) {
+  const { user } = useContext(AuthContext);
+  const [songs, setSongs] = useState([]);
+  const [progress, setProgress] = useState(null);
+  const [search, setSearch] = useState('');
+
+  useEffect(() => {
+    let mounted = true;
+    getSongs().then((items) => { if (mounted) setSongs(items); });
+    return () => { mounted = false; };
+  }, []);
+
+  useEffect(() => {
+    let mounted = true;
+    getLearnerProgress(user?.uid).then((data) => { if (mounted) setProgress(data); }).catch(() => {});
+    return () => { mounted = false; };
+  }, [user?.uid]);
+
+  const name = user?.name || user?.displayName || 'Learner';
+  const latestAssessment = progress?.latestAssessment;
+
   return (
-    <View style={styles.container}>
-      {/* Top Header */}
-      <View style={styles.header}>
-        <View style={styles.headerLeft}>
-          <Image source={{ uri: 'https://i.pravatar.cc/150?img=11' }} style={styles.profileAvatar} />
-          <Text style={styles.headerLogo}>Naada</Text>
-        </View>
-        <View style={styles.headerRight}>
-          <View style={styles.streakBadge}>
-            <Text style={styles.streakIcon}>🔥</Text>
-            <Text style={styles.streakText}>7</Text>
-          </View>
-          <TouchableOpacity>
-            <Text style={styles.settingsIcon}>⚙</Text>
+    <View style={homeStyles.screen}>
+      <View style={homeStyles.header}>
+        <Text style={homeStyles.brand}>Naada</Text>
+        <TouchableOpacity onPress={() => navigation.navigate('Dashboard')} accessibilityRole="button" accessibilityLabel="Open profile">
+          <Text style={homeStyles.profileMark}>○</Text>
+        </TouchableOpacity>
+      </View>
+      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={homeStyles.content}>
+        <Text style={homeStyles.kicker}>SING, LISTEN, LEARN</Text>
+        <Text style={homeStyles.greeting}>Welcome, {name}</Text>
+        <Text style={homeStyles.subtitle}>Learn Sinhala through selected songs and their words.</Text>
+
+        <View style={homeStyles.search}>
+          <TextInput
+            style={homeStyles.searchInput}
+            value={search}
+            onChangeText={setSearch}
+            placeholder="Search songs or artists"
+            placeholderTextColor={lyricsTheme.colors.secondaryText}
+            returnKeyType="search"
+            onSubmitEditing={() => navigation.navigate('SongLibrary', { query: search })}
+            accessibilityLabel="Search songs or artists"
+          />
+          <TouchableOpacity onPress={() => navigation.navigate('SongLibrary', { query: search })} accessibilityRole="button">
+            <Text style={homeStyles.searchAction}>Search</Text>
           </TouchableOpacity>
         </View>
-      </View>
 
-      <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 150, flexGrow: 1 }}>
-        {/* Welcome Section */}
-        <View style={styles.welcomeSection}>
-          <Text style={styles.welcomeTitle}>Welcome Back</Text>
-          <Text style={styles.welcomeSubtitle}>Ready to master the rhythms of Sinhala Classical?</Text>
+        <View style={homeStyles.sectionHeading}>
+          <Text style={homeStyles.sectionTitle}>Recommended songs</Text>
+          <TouchableOpacity onPress={() => navigation.navigate('SongLibrary')} accessibilityRole="button">
+            <Text style={homeStyles.link}>See all</Text>
+          </TouchableOpacity>
         </View>
-
-        {/* Currently Learning Card */}
-        <View style={styles.learningCardContainer}>
-          <View style={styles.learningCard}>
-            {/* Using a placeholder dark background to simulate the image */}
-            <View style={styles.learningCardContent}>
-              <View style={styles.cardHeaderRow}>
-                <View style={styles.tag}>
-                  <View style={styles.dot} />
-                  <Text style={styles.tagText}>Currently Learning</Text>
-                </View>
-              </View>
-
-              <View style={styles.cardMainRow}>
-                <View style={styles.cardTextContent}>
-                  <Text style={styles.songTitle} numberOfLines={2}>Ninda Nena Rathriye</Text>
-                  <Text style={styles.artistName}>W.D. Amaradeva</Text>
-                  <View style={styles.badgesContainer}>
-                    <View style={styles.badge}>
-                      <Text style={styles.badgeText}>Intermediate</Text>
-                    </View>
-                    <View style={styles.badge}>
-                      <Text style={styles.badgeText}>Vocals & Sitar</Text>
-                    </View>
-                  </View>
-                </View>
-                
-                <TouchableOpacity style={styles.playButton} activeOpacity={0.85}>
-                  <Text style={styles.playIcon}>▶</Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-            <View style={styles.progressBarContainer}>
-              <View style={styles.progressBarFill} />
-            </View>
-          </View>
-        </View>
-
-        {/* Quick Access & AI Tools */}
-        <View style={styles.sectionHeader}>
-          <Text style={styles.sectionTitle}>Quick Access & AI Tools</Text>
-          <Text style={styles.aiPoweredText}>AI Powered</Text>
-        </View>
-        
-        <View style={styles.toolsGrid}>
-          <View style={styles.toolCard}>
-            <View style={styles.toolHeader}>
-               <View style={styles.iconContainer}>
-                 <Text style={styles.toolIcon}>ılı</Text>
-               </View>
-               <View style={styles.toolTag}>
-                 <Text style={styles.toolTagText}>AI Engine</Text>
-               </View>
-            </View>
-            <Text style={styles.toolTitle}>Audio Engine</Text>
-            <Text style={styles.toolSubtitle}>Upload & decompose tracks</Text>
-          </View>
-          
+        {songs.slice(0, 2).map((song) => (
           <TouchableOpacity
-            style={styles.toolCard}
-            onPress={() => navigation.navigate('SongProcessing')}
-            activeOpacity={0.82}
+            key={song.id}
+            style={homeStyles.songRow}
+            onPress={() => navigation.navigate('SongPlayer', { songId: song.id })}
             accessibilityRole="button"
-            accessibilityLabel="Open Smart Lyrics"
           >
-            <View style={styles.toolHeader}>
-               <View style={styles.iconContainer}>
-                 <Text style={styles.toolIcon}>A文</Text>
-               </View>
-               <View style={[styles.toolTag, {backgroundColor: '#30183b', borderColor: '#4a2559'}]}>
-                 <Text style={[styles.toolTagText, {color: '#c074ff'}]}>Vocab</Text>
-               </View>
+            <View style={homeStyles.artwork}><Text style={homeStyles.artworkMark}>{song.artworkMark}</Text></View>
+            <View style={homeStyles.songText}>
+              <Text style={homeStyles.songTitle}>{song.title}</Text>
+              <Text style={homeStyles.songMeta}>{song.artist}</Text>
+              <Text style={homeStyles.sample}>{song.sourceLabel}</Text>
             </View>
-            <Text style={styles.toolTitle}>Smart Lyrics</Text>
-            <Text style={styles.toolSubtitle}>Translate & simplify lyrics</Text>
+            <Text style={homeStyles.arrow}>›</Text>
+          </TouchableOpacity>
+        ))}
+
+        <View style={homeStyles.sectionHeading}>
+          <Text style={homeStyles.sectionTitle}>Your learning</Text>
+        </View>
+        <View style={homeStyles.progressPanel}>
+          <Text style={homeStyles.progressValue}>{latestAssessment?.level || 'Not assessed'}</Text>
+          <Text style={homeStyles.progressDetail}>
+            {latestAssessment
+              ? `${latestAssessment.score} of ${latestAssessment.total} assessment answers correct`
+              : 'Take a short check-in to get a provisional starting level.'}
+          </Text>
+          <TouchableOpacity
+            style={homeStyles.actionButton}
+            onPress={() => navigation.navigate('LearnerAssessment')}
+            accessibilityRole="button"
+          >
+            <Text style={homeStyles.actionText}>{latestAssessment ? 'Retake assessment' : 'Start assessment'}</Text>
           </TouchableOpacity>
         </View>
-
-        {/* Suggested Sinhala Classical */}
-        <View style={styles.sectionHeader}>
-          <Text style={styles.sectionTitle}>Suggested Sinhala Classical</Text>
-          <Text style={styles.seeAllText}>See All</Text>
-        </View>
-        
-        <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.suggestedList}>
-          <View style={styles.suggestedCard}>
-             <View style={styles.suggestedImagePlaceholder}>
-               <Text style={styles.suggestedIcon}>🥁</Text>
-             </View>
-          </View>
-          <View style={styles.suggestedCard}>
-             <View style={styles.suggestedImagePlaceholder}>
-               <Text style={styles.suggestedIcon}>🎵</Text>
-             </View>
-          </View>
-        </ScrollView>
+        <TouchableOpacity style={homeStyles.progressLink} onPress={() => navigation.navigate('LearningProgress')} accessibilityRole="button">
+          <Text style={homeStyles.link}>View learning progress  ›</Text>
+        </TouchableOpacity>
       </ScrollView>
-
-      {/* Floating AI Bot Button */}
-      <TouchableOpacity 
-        style={styles.fab}
-        onPress={() => navigation.navigate('AiTutor')}
-        activeOpacity={0.8}
-        accessibilityLabel="Open AI Tutor Chat"
-      >
-         <View style={styles.fabGlow}>
-           <Text style={styles.fabIcon}>🤖</Text>
-         </View>
-         <View style={styles.fabBadge} />
-      </TouchableOpacity>
-
-      {/* Bottom Tab Bar Mockup */}
-      <View style={styles.bottomTabBar}>
-        <TouchableOpacity style={styles.tabItem}>
-          <Text style={[styles.tabIcon, {color: '#00e5ff'}]}>🏠</Text>
-          <Text style={[styles.tabText, {color: '#00e5ff', fontWeight: 'bold'}]}>Home</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.tabItem}>
-          <Text style={styles.tabIcon}>🔍</Text>
-          <Text style={styles.tabText}>Search</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.tabItem}>
-          <Text style={styles.tabIcon}>🎵</Text>
-          <Text style={styles.tabText}>Library</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.tabItem} onPress={() => navigation.navigate('Dashboard')}>
-          <Text style={styles.tabIcon}>👤</Text>
-          <Text style={styles.tabText}>Profile</Text>
-        </TouchableOpacity>
-      </View>
+      <PrimaryTabBar navigation={navigation} activeRoute="Home" />
     </View>
   );
 }
+
+const homeStyles = StyleSheet.create({
+  screen: { flex: 1, backgroundColor: lyricsTheme.colors.background, paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0 },
+  header: { minHeight: 54, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 20, borderBottomWidth: 1, borderBottomColor: lyricsTheme.colors.border },
+  brand: { color: lyricsTheme.colors.text, fontSize: 19, fontWeight: '900' },
+  profileMark: { color: lyricsTheme.colors.lightBlue, fontSize: 25, paddingHorizontal: 4 },
+  content: { paddingHorizontal: 20, paddingTop: 23, paddingBottom: 24 },
+  kicker: { color: lyricsTheme.colors.lightBlue, fontSize: 10, fontWeight: '900', letterSpacing: 1.3 },
+  greeting: { color: lyricsTheme.colors.text, fontSize: 27, lineHeight: 35, fontWeight: '900', marginTop: 8 },
+  subtitle: { color: lyricsTheme.colors.secondaryText, fontSize: 14, lineHeight: 22, marginTop: 6 },
+  search: { minHeight: 48, flexDirection: 'row', alignItems: 'center', backgroundColor: lyricsTheme.colors.card, borderWidth: 1, borderColor: lyricsTheme.colors.border, borderRadius: 8, marginTop: 20, paddingHorizontal: 12 },
+  searchInput: { flex: 1, color: lyricsTheme.colors.text, fontSize: 13, paddingVertical: 10 },
+  searchAction: { color: lyricsTheme.colors.lightBlue, fontSize: 12, fontWeight: '800' },
+  sectionHeading: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginTop: 25, marginBottom: 8 },
+  sectionTitle: { color: lyricsTheme.colors.text, fontSize: 16, fontWeight: '800' },
+  link: { color: lyricsTheme.colors.lightBlue, fontSize: 12, fontWeight: '700' },
+  songRow: { minHeight: 77, flexDirection: 'row', alignItems: 'center', paddingVertical: 10, borderBottomWidth: 1, borderBottomColor: lyricsTheme.colors.border },
+  artwork: { width: 48, height: 48, alignItems: 'center', justifyContent: 'center', backgroundColor: lyricsTheme.colors.cardSecondary, borderRadius: 7, marginRight: 11 },
+  artworkMark: { color: lyricsTheme.colors.lightBlue, fontSize: 21, fontWeight: '800' },
+  songText: { flex: 1 },
+  songTitle: { color: lyricsTheme.colors.text, fontSize: 14, fontWeight: '800' },
+  songMeta: { color: lyricsTheme.colors.secondaryText, fontSize: 11, marginTop: 3 },
+  sample: { color: lyricsTheme.colors.lightBlue, fontSize: 10, marginTop: 4 },
+  arrow: { color: lyricsTheme.colors.lightBlue, fontSize: 24, marginLeft: 8 },
+  progressPanel: { backgroundColor: lyricsTheme.colors.card, borderWidth: 1, borderColor: lyricsTheme.colors.border, borderRadius: 8, padding: 15 },
+  progressValue: { color: lyricsTheme.colors.text, fontSize: 18, fontWeight: '900' },
+  progressDetail: { color: lyricsTheme.colors.secondaryText, fontSize: 12, lineHeight: 19, marginTop: 5 },
+  actionButton: { alignSelf: 'flex-start', backgroundColor: lyricsTheme.colors.primary, borderRadius: 7, paddingHorizontal: 13, paddingVertical: 10, marginTop: 13 },
+  actionText: { color: '#FFFFFF', fontSize: 12, fontWeight: '800' },
+  progressLink: { alignSelf: 'flex-start', paddingVertical: 12 },
+});
 
 const styles = StyleSheet.create({
   container: {

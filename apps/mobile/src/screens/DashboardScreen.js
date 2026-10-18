@@ -1,9 +1,21 @@
-import React, { useContext } from 'react';
-import { View, Text, StyleSheet, SafeAreaView, ScrollView, TouchableOpacity, Image, Platform, StatusBar, Alert } from 'react-native';
+import React, { useContext, useEffect, useState } from 'react';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Platform, StatusBar, Alert } from 'react-native';
 import { AuthContext } from '../context/AuthContext';
+import PrimaryTabBar from '../components/PrimaryTabBar';
+import { getLearnerProgress } from '../services/learnerProgressService';
+import { lyricsTheme } from '../theme/lyricsTheme';
 
 export default function DashboardScreen({ navigation }) {
   const { user, logout, deleteAccount } = useContext(AuthContext);
+  const [latestAssessment, setLatestAssessment] = useState(null);
+
+  useEffect(() => {
+    let mounted = true;
+    getLearnerProgress(user?.uid)
+      .then((progress) => { if (mounted) setLatestAssessment(progress.latestAssessment); })
+      .catch(() => {});
+    return () => { mounted = false; };
+  }, [user?.uid]);
 
   const handleDeleteAccount = () => {
     Alert.alert(
@@ -16,153 +28,69 @@ export default function DashboardScreen({ navigation }) {
     );
   };
 
-  const userName = user?.name || 'Asha Perera';
+  const userName = user?.name || user?.displayName || 'Learner';
 
   return (
-    <View style={styles.container}>
-      {/* Top Header */}
-      <View style={styles.header}>
-        <TouchableOpacity>
-          <Text style={styles.headerIcon}>☰</Text>
-        </TouchableOpacity>
-        <Text style={styles.headerLogo}>Naada</Text>
-        <TouchableOpacity>
-          <View>
-            <Text style={styles.headerIcon}>🔔</Text>
-            <View style={styles.notificationDot} />
-          </View>
-        </TouchableOpacity>
-      </View>
-
-      <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 120, flexGrow: 1 }}>
-        {/* Profile Section */}
-        <View style={styles.profileSection}>
-          <View style={styles.avatarContainer}>
-            <Image 
-              source={{ uri: 'https://i.pravatar.cc/150?img=47' }} // Random placeholder matching a female profile
-              style={styles.avatar} 
-            />
-            <View style={styles.avatarGlow} />
-            <TouchableOpacity style={styles.settingsIconContainer}>
-              <Text style={styles.settingsIcon}>⚙</Text>
-            </TouchableOpacity>
-          </View>
-          <Text style={styles.userName}>{userName}</Text>
-          <Text style={styles.userLevel}>Level 7 - Intermediate</Text>
-          <View style={styles.progressBarContainer}>
-            <View style={styles.progressBarFill} />
-          </View>
+    <View style={profileStyles.screen}>
+      <View style={profileStyles.header}><Text style={profileStyles.brand}>Profile</Text></View>
+      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={profileStyles.content}>
+        <View style={profileStyles.identity}>
+          <View style={profileStyles.avatar}><Text style={profileStyles.avatarText}>{userName.charAt(0).toUpperCase()}</Text></View>
+          <Text style={profileStyles.name}>{userName}</Text>
+          {user?.email ? <Text style={profileStyles.email}>{user.email}</Text> : null}
         </View>
 
-        {/* Stats Grid */}
-        <View style={styles.statsGrid}>
-          <View style={styles.statCard}>
-            <Text style={[styles.statValue, { color: '#e0c8ff' }]}>12</Text>
-            <Text style={styles.statLabel}>Songs Analyzed</Text>
-          </View>
-          <View style={styles.statCard}>
-            <Text style={[styles.statValue, { color: '#00e5ff' }]}>45</Text>
-            <Text style={styles.statLabel}>Quizzes Passed</Text>
-          </View>
-          <View style={styles.statCard}>
-            <Text style={[styles.statValue, { color: '#ff66a3' }]}>🔥14</Text>
-            <Text style={styles.statLabel}>Day Streak</Text>
-          </View>
-          <View style={styles.statCard}>
-            <Text style={[styles.statValue, { color: '#c074ff' }]}>82%</Text>
-            <Text style={styles.statLabel}>Avg. Score</Text>
-          </View>
-        </View>
-
-        {/* Recent Learning */}
-        <View style={styles.sectionHeader}>
-          <Text style={styles.sectionTitle}>Recent Learning</Text>
-          <TouchableOpacity>
-            <Text style={styles.viewAllText}>View All</Text>
+        <View style={profileStyles.section}>
+          <Text style={profileStyles.sectionTitle}>Learner assessment</Text>
+          <Text style={profileStyles.detail}>
+            {latestAssessment
+              ? `${latestAssessment.level} · ${latestAssessment.score}/${latestAssessment.total} correct · ${new Date(latestAssessment.takenAt).toLocaleDateString()}`
+              : 'No assessment has been completed yet.'}
+          </Text>
+          <TouchableOpacity style={profileStyles.linkRow} onPress={() => navigation.navigate('LearnerAssessment')} accessibilityRole="button">
+            <Text style={profileStyles.link}>{latestAssessment ? 'Retake assessment' : 'Start assessment'}</Text><Text style={profileStyles.arrow}>›</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={profileStyles.linkRow} onPress={() => navigation.navigate('LearningProgress')} accessibilityRole="button">
+            <Text style={profileStyles.link}>View learning progress</Text><Text style={profileStyles.arrow}>›</Text>
           </TouchableOpacity>
         </View>
 
-        <View style={styles.learningList}>
-          {/* Item 1 */}
-          <View style={styles.learningCard}>
-            <View style={styles.learningThumbnailPlaceholder}>
-               <Text style={styles.thumbnailIcon}>🎵</Text>
-            </View>
-            <View style={styles.learningInfo}>
-              <Text style={styles.learningTitle}>Ninda Nena Rathriye</Text>
-              <Text style={styles.learningSubtitle}>Rhythm Analysis • Completed</Text>
-            </View>
-            <View style={styles.iconCircleCheck}>
-              <Text style={styles.checkIcon}>✓</Text>
-            </View>
-          </View>
-
-          {/* Item 2 */}
-          <View style={styles.learningCard}>
-            <View style={[styles.learningThumbnailPlaceholder, {backgroundColor: '#1a2a3a'}]}>
-              <Text style={styles.thumbnailIcon}>📊</Text>
-            </View>
-            <View style={styles.learningInfo}>
-              <Text style={styles.learningTitle}>Maha Wessaka</Text>
-              <Text style={styles.learningSubtitle}>Melody Construction • 60%</Text>
-            </View>
-            <View style={styles.iconCircleProgress}>
-              <Text style={styles.progressText}></Text>
-            </View>
-          </View>
-
-          {/* Item 3 */}
-          <View style={[styles.learningCard, { opacity: 0.6 }]}>
-            <View style={[styles.learningThumbnailPlaceholder, {backgroundColor: '#222'}]}>
-              <Text style={styles.thumbnailIcon}>🔒</Text>
-            </View>
-            <View style={styles.learningInfo}>
-              <Text style={styles.learningTitle}>Advanced Harmony</Text>
-              <Text style={styles.learningSubtitle}>Unlocks at Level 8</Text>
-            </View>
-          </View>
-        </View>
-        
-        {/* Account Settings */}
-        <View style={[styles.sectionHeader, {marginTop: 10}]}>
-          <Text style={styles.sectionTitle}>Account Settings</Text>
-        </View>
-
-        <View style={styles.accountSettingsContainer}>
-           <TouchableOpacity onPress={logout} style={styles.logoutButton}>
-             <Text style={styles.logoutIcon}>🚪</Text>
-             <Text style={styles.logoutText}>Log Out</Text>
-           </TouchableOpacity>
-
-           <TouchableOpacity onPress={handleDeleteAccount} style={styles.deleteButton}>
-             <Text style={styles.deleteIcon}>⚠️</Text>
-             <Text style={styles.deleteText}>Delete Account</Text>
-           </TouchableOpacity>
+        <View style={profileStyles.section}>
+          <Text style={profileStyles.sectionTitle}>Account</Text>
+          <TouchableOpacity style={profileStyles.accountButton} onPress={logout} accessibilityRole="button">
+            <Text style={profileStyles.accountText}>Sign out</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={profileStyles.deleteButton} onPress={handleDeleteAccount} accessibilityRole="button">
+            <Text style={profileStyles.deleteText}>Delete account</Text>
+          </TouchableOpacity>
         </View>
       </ScrollView>
-
-      {/* Bottom Tab Bar Mockup */}
-      <View style={styles.bottomTabBar}>
-        <TouchableOpacity style={styles.tabItem} onPress={() => navigation.navigate('Home')}>
-          <Text style={styles.tabIcon}>🏠</Text>
-          <Text style={styles.tabText}>Home</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.tabItem}>
-          <Text style={styles.tabIcon}>🔍</Text>
-          <Text style={styles.tabText}>Search</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.tabItem}>
-          <Text style={styles.tabIcon}>🎵</Text>
-          <Text style={styles.tabText}>Library</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.tabItem}>
-          <Text style={[styles.tabIcon, {color: '#00e5ff'}]}>👤</Text>
-          <Text style={[styles.tabText, {color: '#00e5ff', fontWeight: 'bold'}]}>Profile</Text>
-        </TouchableOpacity>
-      </View>
+      <PrimaryTabBar navigation={navigation} activeRoute="Dashboard" />
     </View>
   );
 }
+
+const profileStyles = StyleSheet.create({
+  screen: { flex: 1, backgroundColor: lyricsTheme.colors.background, paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0 },
+  header: { minHeight: 54, justifyContent: 'center', paddingHorizontal: 20, borderBottomWidth: 1, borderBottomColor: lyricsTheme.colors.border },
+  brand: { color: lyricsTheme.colors.text, fontSize: 18, fontWeight: '900' },
+  content: { padding: 20, paddingBottom: 24 },
+  identity: { alignItems: 'center', paddingVertical: 24 },
+  avatar: { width: 72, height: 72, borderRadius: 36, alignItems: 'center', justifyContent: 'center', backgroundColor: lyricsTheme.colors.cardSecondary, borderWidth: 1, borderColor: lyricsTheme.colors.border },
+  avatarText: { color: lyricsTheme.colors.lightBlue, fontSize: 27, fontWeight: '900' },
+  name: { color: lyricsTheme.colors.text, fontSize: 21, fontWeight: '900', marginTop: 13 },
+  email: { color: lyricsTheme.colors.secondaryText, fontSize: 13, marginTop: 4 },
+  section: { paddingTop: 18, paddingBottom: 12, borderTopWidth: 1, borderTopColor: lyricsTheme.colors.border, marginTop: 10 },
+  sectionTitle: { color: lyricsTheme.colors.text, fontSize: 16, fontWeight: '800' },
+  detail: { color: lyricsTheme.colors.secondaryText, fontSize: 12, lineHeight: 19, marginTop: 8 },
+  linkRow: { minHeight: 45, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', borderTopWidth: 1, borderTopColor: lyricsTheme.colors.border, marginTop: 8 },
+  link: { color: lyricsTheme.colors.lightBlue, fontSize: 13, fontWeight: '700' },
+  arrow: { color: lyricsTheme.colors.lightBlue, fontSize: 22 },
+  accountButton: { minHeight: 46, justifyContent: 'center', borderTopWidth: 1, borderTopColor: lyricsTheme.colors.border, marginTop: 9 },
+  accountText: { color: lyricsTheme.colors.lightBlue, fontSize: 13, fontWeight: '700' },
+  deleteButton: { minHeight: 44, justifyContent: 'center', borderTopWidth: 1, borderTopColor: lyricsTheme.colors.border },
+  deleteText: { color: lyricsTheme.colors.error, fontSize: 13, fontWeight: '700' },
+});
 
 const styles = StyleSheet.create({
   container: {
