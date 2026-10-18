@@ -1,7 +1,7 @@
 {
   "model_name": "xgb_difficulty_model",
   "model_version": "1.0.0",
-  "timestamp": "2026-10-18T13:09:04.697989",
+  "timestamp": "2026-10-18T13:49:00.384887",
   "random_state": 42,
   "test_size": 0.2,
   "feature_count": 39,
@@ -47,8 +47,8 @@
     "text_lexical_diversity_yules_k"
   ],
   "baseline_metrics": {
-    "mae": 5.7468045274030235,
-    "rmse": 7.164058926366697,
+    "mae": 5.746804527403023,
+    "rmse": 7.164058926366696,
     "r2": 0.7303464316552564
   },
   "xgb_metrics": {
