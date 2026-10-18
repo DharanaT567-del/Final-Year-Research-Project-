@@ -478,13 +478,22 @@ class DatasetProcessor:
             if norm_col and pd.notna(row[norm_col]):
                 norm_meaning = str(row[norm_col]).strip()
 
-            # Difficulty
+            # Difficulty and Difficulty Label Categorization
             difficulty = -1.0
             if diff_col and pd.notna(row[diff_col]):
                 try:
                     difficulty = float(row[diff_col])
                 except (ValueError, TypeError):
                     difficulty = -1.0
+
+            difficulty_label = "Unassigned"
+            if difficulty >= 0:
+                if difficulty < 4.0:
+                    difficulty_label = "Beginner"
+                elif difficulty < 7.0:
+                    difficulty_label = "Intermediate"
+                else:
+                    difficulty_label = "Advanced"
 
             # Dominant emotion calculation
             dominant_emotion = "Unannotated"
@@ -502,11 +511,13 @@ class DatasetProcessor:
                         pass
 
             # Formulate structured text representation for embedding
+            diff_text = f"\nDifficulty: {difficulty_label} ({difficulty:.1f}/10)" if difficulty >= 0 else ""
             structured_text = (
                 f"Song Title: {title}\n"
                 f"Artist: {artist}\n"
                 f"Composer: {composer}\n"
-                f"Lyricist: {lyricist}\n"
+                f"Lyricist: {lyricist}"
+                f"{diff_text}\n"
                 f"Lyrics:\n{lyrics}"
             )
 
@@ -522,6 +533,7 @@ class DatasetProcessor:
                 "lyrics_preview": lyrics[:1000],
                 "normalized_meaning": norm_meaning[:1500] if norm_meaning else "",
                 "difficulty": difficulty,
+                "difficulty_label": difficulty_label,
                 "dominant_emotion": dominant_emotion,
                 # Spring AI PineconeVectorStore compatibility:
                 "document_content": structured_text[:4000],

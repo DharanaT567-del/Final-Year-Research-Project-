@@ -157,11 +157,11 @@ export default function DashboardScreen({ navigation }) {
           <Text style={styles.tabIcon}>🏠</Text>
           <Text style={styles.tabText}>Home</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.tabItem}>
+        <TouchableOpacity style={styles.tabItem} onPress={() => navigation.navigate('Library')}>
           <Text style={styles.tabIcon}>🔍</Text>
           <Text style={styles.tabText}>Search</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.tabItem}>
+        <TouchableOpacity style={styles.tabItem} onPress={() => navigation.navigate('Library')}>
           <Text style={styles.tabIcon}>🎵</Text>
           <Text style={styles.tabText}>Library</Text>
         </TouchableOpacity>

@@ -21,7 +21,7 @@ const SUGGESTED_PROMPTS = [
   'What instruments are used in Sinhala classical music?',
 ];
 
-export default function AiTutorScreen({ navigation }) {
+export default function AiTutorScreen({ navigation, route }) {
   const [messages, setMessages] = useState([
     {
       id: 'welcome-1',
@@ -41,6 +41,12 @@ export default function AiTutorScreen({ navigation }) {
       }, 100);
     }
   }, [messages, loading]);
+
+  useEffect(() => {
+    if (route?.params?.initialQuery) {
+      handleSend(route.params.initialQuery);
+    }
+  }, [route?.params?.initialQuery]);
 
   const handleSend = async (textToSend) => {
     const text = (textToSend || inputText).trim();

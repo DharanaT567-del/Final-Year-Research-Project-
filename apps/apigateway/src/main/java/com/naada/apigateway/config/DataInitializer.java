@@ -61,6 +61,7 @@ public class DataInitializer implements ApplicationRunner {
                             "Song: Ninda Nena Rathriye\n"
                             + "Artist: Pandit W.D. Amaradeva\n"
                             + "Genre: Sinhala Classical\n"
+                            + "Difficulty: Intermediate (5.5 / 10)\n"
                             + "Taal (Rhythm): Dadra — a 6-beat rhythmic cycle "
                             + "(dha dhin na | dha tin na) commonly used in light classical "
                             + "and semi-classical compositions.\n"
@@ -73,12 +74,15 @@ public class DataInitializer implements ApplicationRunner {
                             + "The song blends Hindustani raga foundations with Sinhala poetic traditions.",
                             Map.of("title", "Ninda Nena Rathriye",
                                    "artist", "Pandit W.D. Amaradeva",
-                                   "genre", "Sinhala Classical")
+                                   "genre", "Sinhala Classical",
+                                   "difficultyLabel", "Intermediate",
+                                   "difficultyScore", 5.5)
                     ),
                     new Document(
                             "Song: Maha Wessaka\n"
                             + "Artist: Pandit W.D. Amaradeva\n"
                             + "Genre: Sinhala Classical\n"
+                            + "Difficulty: Intermediate (5.0 / 10)\n"
                             + "Taal (Rhythm): Keherwa — an 8-beat rhythmic cycle "
                             + "(dha ge na ti | na ka dhi na) frequently used in bhajans, "
                             + "folk, and light classical music.\n"
@@ -91,12 +95,15 @@ public class DataInitializer implements ApplicationRunner {
                             + "seasonal beauty and Buddhist cultural festivities.",
                             Map.of("title", "Maha Wessaka",
                                    "artist", "Pandit W.D. Amaradeva",
-                                   "genre", "Sinhala Classical")
+                                   "genre", "Sinhala Classical",
+                                   "difficultyLabel", "Intermediate",
+                                   "difficultyScore", 5.0)
                     ),
                     new Document(
                             "Song: Galana Gangaki Jeewithe\n"
                             + "Artist: Victor Rathnayake\n"
                             + "Genre: Sinhala Classical\n"
+                            + "Difficulty: Advanced (7.5 / 10)\n"
                             + "Taal (Rhythm): Keherwa — an 8-beat rhythmic cycle.\n"
                             + "Theme: Human existence and transience. The flowing river "
                             + "metaphor represents the impermanence of life (anicca), a core "
@@ -109,7 +116,9 @@ public class DataInitializer implements ApplicationRunner {
                             + "that resonates with Buddhist teachings on impermanence.",
                             Map.of("title", "Galana Gangaki Jeewithe",
                                    "artist", "Victor Rathnayake",
-                                   "genre", "Sinhala Classical")
+                                   "genre", "Sinhala Classical",
+                                   "difficultyLabel", "Advanced",
+                                   "difficultyScore", 7.5)
                     )
             );
 

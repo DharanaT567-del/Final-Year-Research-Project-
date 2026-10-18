@@ -8,6 +8,7 @@ import DashboardScreen from '../screens/DashboardScreen';
 import HomeScreen from '../screens/HomeScreen';
 import AiTutorScreen from '../screens/AiTutorScreen';
 import EditProfileScreen from '../screens/EditProfileScreen';
+import LibraryScreen from '../screens/LibraryScreen';
 import { ActivityIndicator, View } from 'react-native';
 
 const Stack = createNativeStackNavigator();
@@ -30,6 +31,7 @@ export default function AppNavigator() {
           // Main App Stack
           <>
             <Stack.Screen name="Home" component={HomeScreen} />
+            <Stack.Screen name="Library" component={LibraryScreen} />
             <Stack.Screen name="Dashboard" component={DashboardScreen} />
             <Stack.Screen name="AiTutor" component={AiTutorScreen} />
             <Stack.Screen name="AiTutorChat" component={AiTutorScreen} />

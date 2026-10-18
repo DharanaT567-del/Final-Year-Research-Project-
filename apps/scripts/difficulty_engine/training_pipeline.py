@@ -395,6 +395,11 @@ class DifficultyModelPipeline:
         # Adapt cross-validation folds if dataset is small
         cv_folds = 5 if len(X_train) >= 5 else max(2, len(X_train))
 
+        # On Windows (particularly with Python 3.13), multiprocessing resource tracking
+        # can raise ModuleNotFoundError: No module named '_posixsubprocess'.
+        # Using the threading backend avoids this while preserving multi-core execution.
+        parallel_backend = "threading" if os.name == "nt" else "loky"
+
         grid_search = GridSearchCV(
             estimator=base_xgb,
             param_grid=param_grid,
@@ -403,7 +408,8 @@ class DifficultyModelPipeline:
             n_jobs=-1,
             verbose=0,
         )
-        grid_search.fit(X_train, y_train)
+        with joblib.parallel_backend(parallel_backend):
+            grid_search.fit(X_train, y_train)
 
         best_xgb = grid_search.best_estimator_
         best_params = grid_search.best_params_
@@ -415,14 +421,15 @@ class DifficultyModelPipeline:
         metrics = self.evaluate_model(best_xgb, X_test, y_test, model_name="XGBoost Tuned")
 
         # 5-fold cross-validation on the training set using best estimator
-        cv_scores = cross_val_score(
-            best_xgb,
-            X_train,
-            y_train,
-            cv=cv_folds,
-            scoring="neg_mean_absolute_error",
-            n_jobs=-1,
-        )
+        with joblib.parallel_backend(parallel_backend):
+            cv_scores = cross_val_score(
+                best_xgb,
+                X_train,
+                y_train,
+                cv=cv_folds,
+                scoring="neg_mean_absolute_error",
+                n_jobs=-1,
+            )
         cv_mae_scores = -cv_scores
         cv_mae_mean = float(np.mean(cv_mae_scores))
         cv_mae_std = float(np.std(cv_mae_scores))
@@ -477,8 +484,8 @@ class DifficultyModelPipeline:
         metadata_path = self.output_dir / "model_metadata.json"
 
         # 1. Save model and scaler via joblib
-        joblib.dump(self.xgb_model, model_path)
-        joblib.dump(self.scaler, scaler_path)
+        joblib.dump(self.xgb_model, str(model_path.resolve()))
+        joblib.dump(self.scaler, str(scaler_path.resolve()))
 
         # 2. Save feature names
         with open(feature_names_path, "w", encoding="utf-8") as f:
@@ -519,6 +526,7 @@ class DifficultyModelPipeline:
         audio_features_df: pd.DataFrame,
         text_features_df: pd.DataFrame,
         difficulty_scores: pd.Series,
+        param_grid: Optional[Dict[str, List[Any]]] = None,
     ) -> Dict[str, Any]:
         """Orchestrate the full end-to-end training, evaluation, and export pipeline.
 
@@ -538,6 +546,8 @@ class DifficultyModelPipeline:
             Extracted text NLP features DataFrame.
         difficulty_scores : pd.Series
             Continuous target difficulty values (0 to 100).
+        param_grid : Optional[Dict[str, List[Any]]], default=None
+            Optional hyperparameter grid for XGBoost tuning.
 
         Returns
         -------
@@ -573,6 +583,7 @@ class DifficultyModelPipeline:
             y_train=y_train,
             X_test=X_test,
             y_test=y_test,
+            param_grid=param_grid,
         )
 
         # Step 5: Export Models and Metadata

@@ -110,7 +110,9 @@ export default function HomeScreen({ navigation }) {
         {/* Suggested Sinhala Classical */}
         <View style={styles.sectionHeader}>
           <Text style={styles.sectionTitle}>Suggested Sinhala Classical</Text>
-          <Text style={styles.seeAllText}>See All</Text>
+          <TouchableOpacity onPress={() => navigation.navigate('Library')}>
+            <Text style={styles.seeAllText}>See All</Text>
+          </TouchableOpacity>
         </View>
         
         <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.suggestedList}>
@@ -146,11 +148,11 @@ export default function HomeScreen({ navigation }) {
           <Text style={[styles.tabIcon, {color: '#00e5ff'}]}>🏠</Text>
           <Text style={[styles.tabText, {color: '#00e5ff', fontWeight: 'bold'}]}>Home</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.tabItem}>
+        <TouchableOpacity style={styles.tabItem} onPress={() => navigation.navigate('Library')}>
           <Text style={styles.tabIcon}>🔍</Text>
           <Text style={styles.tabText}>Search</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.tabItem}>
+        <TouchableOpacity style={styles.tabItem} onPress={() => navigation.navigate('Library')}>
           <Text style={styles.tabIcon}>🎵</Text>
           <Text style={styles.tabText}>Library</Text>
         </TouchableOpacity>

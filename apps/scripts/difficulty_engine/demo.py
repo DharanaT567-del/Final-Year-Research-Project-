@@ -389,11 +389,22 @@ def run_demo(
         output_dir=str(output_path),
     )
 
+    demo_grid = {
+        "n_estimators": [100, 200],
+        "max_depth": [3, 5],
+        "learning_rate": [0.05, 0.1],
+        "subsample": [0.8],
+        "colsample_bytree": [0.8],
+        "reg_alpha": [0.0],
+        "reg_lambda": [1.0],
+    }
+
     try:
         results = pipeline.run_full_pipeline(
             audio_features_df=audio_df,
             text_features_df=text_df,
             difficulty_scores=difficulty_scores,
+            param_grid=demo_grid,
         )
     except TypeError:
         # Fallback to alternate keyword arguments if implemented by variant pipeline
