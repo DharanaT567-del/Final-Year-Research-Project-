@@ -7,8 +7,11 @@ import SignupScreen from '../screens/SignupScreen';
 import DashboardScreen from '../screens/DashboardScreen';
 import HomeScreen from '../screens/HomeScreen';
 import AiTutorScreen from '../screens/AiTutorScreen';
-import SongProcessingScreen from '../screens/SongProcessingScreen';
-import LyricsResultsScreen from '../screens/LyricsResultsScreen';
+import SongLibraryScreen from '../screens/SongLibraryScreen';
+import SongPlayerScreen from '../screens/SongPlayerScreen';
+import LyricsExplanationScreen from '../screens/LyricsExplanationScreen';
+import LearnerAssessmentScreen from '../screens/LearnerAssessmentScreen';
+import LearningProgressScreen from '../screens/LearningProgressScreen';
 import { ActivityIndicator, View } from 'react-native';
 
 const Stack = createNativeStackNavigator();
@@ -34,8 +37,12 @@ export default function AppNavigator() {
             <Stack.Screen name="Dashboard" component={DashboardScreen} />
             <Stack.Screen name="AiTutor" component={AiTutorScreen} />
             <Stack.Screen name="AiTutorChat" component={AiTutorScreen} />
-            <Stack.Screen name="SongProcessing" component={SongProcessingScreen} />
-            <Stack.Screen name="LyricsResults" component={LyricsResultsScreen} />
+            <Stack.Screen name="SongLibrary" component={SongLibraryScreen} />
+            <Stack.Screen name="SongProcessing" component={SongLibraryScreen} />
+            <Stack.Screen name="SongPlayer" component={SongPlayerScreen} />
+            <Stack.Screen name="LyricsExplanation" component={LyricsExplanationScreen} />
+            <Stack.Screen name="LearnerAssessment" component={LearnerAssessmentScreen} />
+            <Stack.Screen name="LearningProgress" component={LearningProgressScreen} />
           </>
         ) : (
           // Authentication Stack
