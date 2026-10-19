@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Platform, StatusBar, Alert } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image, Platform, StatusBar, Alert } from 'react-native';
 import { AuthContext } from '../context/AuthContext';
 import PrimaryTabBar from '../components/PrimaryTabBar';
 import { getLearnerProgress } from '../services/learnerProgressService';
@@ -29,13 +29,18 @@ export default function DashboardScreen({ navigation }) {
   };
 
   const userName = user?.name || user?.displayName || 'Learner';
+  const userAvatar = user?.photoURL || user?.profileImage;
 
   return (
     <View style={profileStyles.screen}>
       <View style={profileStyles.header}><Text style={profileStyles.brand}>Profile</Text></View>
       <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={profileStyles.content}>
         <View style={profileStyles.identity}>
-          <View style={profileStyles.avatar}><Text style={profileStyles.avatarText}>{userName.charAt(0).toUpperCase()}</Text></View>
+          {userAvatar ? (
+            <Image source={{ uri: userAvatar }} style={profileStyles.avatar} />
+          ) : (
+            <View style={profileStyles.avatar}><Text style={profileStyles.avatarText}>{userName.charAt(0).toUpperCase()}</Text></View>
+          )}
           <Text style={profileStyles.name}>{userName}</Text>
           {user?.email ? <Text style={profileStyles.email}>{user.email}</Text> : null}
         </View>
@@ -57,6 +62,9 @@ export default function DashboardScreen({ navigation }) {
 
         <View style={profileStyles.section}>
           <Text style={profileStyles.sectionTitle}>Account</Text>
+          <TouchableOpacity style={profileStyles.accountButton} onPress={() => navigation.navigate('EditProfile')} accessibilityRole="button">
+            <Text style={profileStyles.accountText}>Edit profile</Text>
+          </TouchableOpacity>
           <TouchableOpacity style={profileStyles.accountButton} onPress={logout} accessibilityRole="button">
             <Text style={profileStyles.accountText}>Sign out</Text>
           </TouchableOpacity>
@@ -188,7 +196,21 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#00e5ff',
     fontWeight: '600',
+    marginBottom: 10,
+  },
+  editProfileButton: {
+    backgroundColor: '#1f1a2e',
+    paddingHorizontal: 16,
+    paddingVertical: 6,
+    borderRadius: 20,
+    borderWidth: 1,
+    borderColor: '#c074ff',
     marginBottom: 15,
+  },
+  editProfileButtonText: {
+    color: '#e0c8ff',
+    fontSize: 13,
+    fontWeight: '600',
   },
   progressBarContainer: {
     width: '60%',
