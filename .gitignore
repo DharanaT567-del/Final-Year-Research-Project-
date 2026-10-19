@@ -92,6 +92,15 @@ commit_script.py
 *.bak
 venv/
 graphify-out/
+.venv/
+__pycache__/
+*.pyc
+ingestion_checkpoint.json
+checkpoint_*.json
+
+# ==========================================
+# Agent Skills
+# ==========================================
 .agents/
 skills/
 skills-lock.json

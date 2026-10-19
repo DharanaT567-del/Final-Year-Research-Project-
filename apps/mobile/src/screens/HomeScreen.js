@@ -34,6 +34,9 @@ export default function HomeScreen({ navigation }) {
         <TouchableOpacity onPress={() => navigation.navigate('Dashboard')} accessibilityRole="button" accessibilityLabel="Open profile">
           <Text style={homeStyles.profileMark}>○</Text>
         </TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate('EditProfile')} accessibilityRole="button" accessibilityLabel="Edit profile">
+          <Text style={homeStyles.link}>Edit profile</Text>
+        </TouchableOpacity>
       </View>
       <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={homeStyles.content}>
         <Text style={homeStyles.kicker}>SING, LISTEN, LEARN</Text>

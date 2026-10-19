@@ -12,6 +12,7 @@ import SongPlayerScreen from '../screens/SongPlayerScreen';
 import LyricsExplanationScreen from '../screens/LyricsExplanationScreen';
 import LearnerAssessmentScreen from '../screens/LearnerAssessmentScreen';
 import LearningProgressScreen from '../screens/LearningProgressScreen';
+import EditProfileScreen from '../screens/EditProfileScreen';
 import { ActivityIndicator, View } from 'react-native';
 
 const Stack = createNativeStackNavigator();
@@ -43,6 +44,7 @@ export default function AppNavigator() {
             <Stack.Screen name="LyricsExplanation" component={LyricsExplanationScreen} />
             <Stack.Screen name="LearnerAssessment" component={LearnerAssessmentScreen} />
             <Stack.Screen name="LearningProgress" component={LearningProgressScreen} />
+            <Stack.Screen name="EditProfile" component={EditProfileScreen} />
           </>
         ) : (
           // Authentication Stack

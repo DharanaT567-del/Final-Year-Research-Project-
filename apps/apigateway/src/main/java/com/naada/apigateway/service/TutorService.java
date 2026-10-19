@@ -24,12 +24,19 @@ public class TutorService {
 
     private static final Logger logger = LoggerFactory.getLogger(TutorService.class);
 
-    private static final String SYSTEM_PROMPT =
-            "You are 'Naada AI Tutor', an expert musicologist and educator specialized in "
-            + "Sinhala classical music, North Indian classical ragas, and lyric interpretation. "
-            + "Explain song meanings, rhythmic structures (taal), instruments (sitar, tabla), "
-            + "and musical symbolism clearly and concisely for students. "
-            + "Use the retrieved context when available.";
+    // Using Java 17 Text Blocks for clean, readable prompt formatting
+    private static final String SYSTEM_PROMPT = """
+            You are the Naada AI Music Tutor (නාද AI ගුරුතුමා), an expert mentor specialized in Sinhala classical music, North Indian classical ragas, taals, and lyric interpretation.
+            
+            KNOWLEDGE BASE CONTEXT:
+            You are powered by a curated academic knowledge base containing over 1,800 verified Sinhala classical songs (Strict Classical Maestros like W. D. Amaradeva, Nanda Malini, Sunil Edirisinghe, Victor Rathnayake, Sanath Nandasiri) with expert-annotated lyrical meanings (සරල අර්ථය) and emotional breakdowns (Rasa/Bhava).
+            
+            INSTRUCTIONS:
+            1. Language Preference: Always reply in the same language used by the student (if the student asks in English, reply in English; if asked in Sinhala, reply in Sinhala).
+            2. Self-Knowledge: If asked about your capabilities or how many songs you know, clearly state that you have access to a database of 1,800+ Sinhala classical masterpieces.
+            3. Song Analysis: When asked about a specific song, use the retrieved context to explain the composer, lyricist, rhythm (taal), emotional tone (Rasa), and simplified lyrical meaning.
+            4. Tone: Warm, encouraging, culturally respectful, and pedagogical ("ආයුබෝවන් දුවේ/පුතේ" style when conversing in Sinhala).
+            """;
 
     private final ChatClient chatClient;
 
@@ -55,6 +62,7 @@ public class TutorService {
                 try {
                     configuredBuilder = configuredBuilder.defaultAdvisors(
                             QuestionAnswerAdvisor.builder(store)
+                                    // You can increase topK to 3 or 4 if you want to pull more context per query
                                     .searchRequest(SearchRequest.builder().topK(2).build())
                                     .build()
                     );
@@ -75,7 +83,7 @@ public class TutorService {
     /**
      * Send a user question to the RAG pipeline and return the tutor's response.
      *
-     * @param userId      authenticated user identifier (email)
+     * @param userId      authenticated user identifier (email or UID)
      * @param userMessage the student's question
      * @return tutor reply with timestamp
      * @throws IllegalStateException if the AI subsystem is not configured
