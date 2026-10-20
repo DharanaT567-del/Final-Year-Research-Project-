@@ -1,7 +1,7 @@
 {
   "model_name": "xgb_difficulty_model",
   "model_version": "1.0.0",
-  "timestamp": "2026-10-18T13:49:00.384887",
+  "timestamp": "2026-10-18T13:53:05.329545",
   "random_state": 42,
   "test_size": 0.2,
   "feature_count": 39,
