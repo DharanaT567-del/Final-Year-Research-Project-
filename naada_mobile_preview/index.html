@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="si">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>නාදය | Naadha - AI Music Learning App</title>
+  <meta name="description" content="නාදය - සිංහල සම්භාව්‍ය ගීතවල හැඟීම් විශ්ලේෂණය සහ පද සරල කිරීමේ AI සහායකයා.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Sinhala:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Viewport Switcher Controls (Desktop bar) -->
+  <div class="device-controls" id="deviceControls">
+    <div class="control-group">
+      <span class="control-title">නාදය (Naadha) Mobile Preview</span>
+      <span class="control-badge">Sinhala Prototype</span>
+    </div>
+    <div class="viewport-buttons">
+      <button class="view-btn active" id="btnPhoneView" onclick="setDeviceView('phone')">📱 Mobile View (390px)</button>
+      <button class="view-btn" id="btnResponsiveView" onclick="setDeviceView('responsive')">💻 Full View</button>
+      <button class="view-btn theme-btn" id="btnScreenToggle" onclick="toggleScreenDirect()">⇄ තිරය මාරු කරන්න</button>
+    </div>
+  </div>
+
+  <!-- App Wrapper / Phone Shell -->
+  <div class="device-wrapper" id="deviceWrapper">
+    <div class="mobile-frame" id="mobileFrame">
+      
+      <!-- Phone Status Bar -->
+      <div class="phone-status-bar">
+        <span class="status-time" id="statusTime">09:41</span>
+        <div class="notch-speaker"></div>
+        <div class="status-icons">
+          <span class="icon-wifi">📶</span>
+          <span class="icon-battery">🔋</span>
+        </div>
+      </div>
+
+      <!-- App Content Container -->
+      <div class="app-screen-container">
+
+        <!-- ============================================== -->
+        <!-- SCREEN 1: SONG SELECTION & ANALYSIS (මුල් පිටුව) -->
+        <!-- ============================================== -->
+        <section id="screenSelection" class="screen-view active">
+          <!-- Top Bar (Matches HomePageSS.png) -->
+          <header class="app-header">
+            <div class="header-left">
+              <div class="user-avatar-wrap">
+                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80" alt="පැතිකඩ" class="header-avatar">
+              </div>
+              <div class="brand-title">
+                <span class="logo-text">නාදය</span>
+                <span class="logo-sub">Naadha</span>
+              </div>
+            </div>
+            <div class="header-right">
+              <div class="streak-pill">
+                <span class="flame">🔥</span>
+                <span class="streak-num">7</span>
+              </div>
+              <button class="icon-btn" aria-label="සැකසුම්" onclick="openToast('සැකසුම් (Settings) - ආදර්ශනය පමණි')">⚙️</button>
+            </div>
+          </header>
+
+          <!-- Main Scrollable Body -->
+          <main class="scrollable-body">
+            <!-- Welcome Header -->
+            <div class="welcome-banner">
+              <h1 class="welcome-heading">නාදයට සාදරයෙන් පිළිගනිමු</h1>
+              <p class="welcome-sub">සිංහල සම්භාව්‍ය ගීතවල රිද්මය හා හැඟීම් හඳුනා ගැනීමට ඔබ සූදානම්ද?</p>
+            </div>
+
+            <!-- Demo / Sample Disclaimer Banner -->
+            <div class="demo-banner">
+              <span class="sparkle">✦</span>
+              <span>මෙය පූර්වදර්ශන ආදර්ශනයකි (Demo Prototype). විශ්ලේෂණ ප්‍රතිඵල නියැදි දත්ත මත පදනම් වේ.</span>
+            </div>
+
+            <!-- Hero Learning Card (Matches HomePageSS.png) -->
+            <div class="hero-learning-card" id="heroCard">
+              <div class="hero-bg-overlay"></div>
+              <div class="hero-card-inner">
+                <div class="hero-badge">
+                  <span class="pulse-dot"></span>
+                  <span class="badge-text" id="heroBadgeLabel">දැනට තෝරාගත් ගීතය</span>
+                </div>
+
+                <div class="hero-meta-row">
+                  <div class="hero-song-info">
+                    <h2 class="hero-song-title" id="selectedSongTitle">නිහඬ රැයේ සිහින</h2>
+                    <p class="hero-artist-name" id="selectedSongArtist">පණ්ඩිත් ඩබ්.ඩී. අමරදේව</p>
+                    <div class="hero-tag-pills" id="selectedSongTags">
+                      <span class="hero-tag">මධ්‍යම මට්ටම</span>
+                      <span class="hero-tag">ගායනය සහ සිතාරය</span>
+                    </div>
+                  </div>
+
+                  <!-- Glowing Play Button with Circular Ring -->
+                  <div class="play-btn-wrapper">
+                    <button class="circular-play-btn" id="heroPlayBtn" onclick="toggleAudioPlayback()" aria-label="ගීතය වාදනය කරන්න">
+                      <span class="play-icon" id="heroPlayIcon">▶</span>
+                    </button>
+                    <div class="pulse-ring" id="pulseRing"></div>
+                  </div>
+                </div>
+
+                <!-- Audio Scrubber / Progress -->
+                <div class="audio-progress-section">
+                  <div class="progress-bar-track" onclick="scrubAudio(event)">
+                    <div class="progress-bar-fill" id="audioProgressFill" style="width: 42%;"></div>
+                  </div>
+                  <div class="audio-time-row">
+                    <span id="currentTimeLabel">01:24</span>
+                    <div class="audio-wave-anim" id="soundWaves">
+                      <span></span><span></span><span></span><span></span><span></span>
+                    </div>
+                    <span id="durationLabel">03:45</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Audio File Upload / Chooser Section -->
+            <div class="section-container upload-container">
+              <div class="upload-dropzone" id="uploadDropzone" onclick="triggerFileInput()">
+                <div class="upload-icon-circle">
+                  <span>🎵</span>
+                </div>
+                <h3 class="upload-title">ගීතයක් තෝරන්න හෝ උඩුගත කරන්න</h3>
+                <p class="upload-desc">ඔබේ පරිගණකයේ ඇති MP3 හෝ WAV ශ්‍රව්‍ය ගොනුවක් මෙතැනට ඇදගෙන එන්න</p>
+                <div class="upload-btn-fake">
+                  <span>📁 ගොනුවක් තෝරන්න (Browse)</span>
+                </div>
+                <input type="file" id="realAudioInput" accept="audio/*,.mp3,.wav,.m4a" style="display:none;" onchange="handleFileSelected(event)">
+              </div>
+
+              <!-- Selected File Display Card -->
+              <div class="file-status-card" id="fileStatusCard">
+                <span class="file-icon">🎧</span>
+                <div class="file-info-text">
+                  <span class="file-name" id="displayFileName">S001_Nihanda_Raye.mp3</span>
+                  <span class="file-meta" id="displayFileMeta">3.8 MB • ශ්‍රව්‍ය ගොනුව සුදානම්</span>
+                </div>
+                <button class="remove-file-btn" onclick="clearSelectedFile()" title="ඉවත් කරන්න">✕</button>
+              </div>
+
+              <!-- Unsupported File Error Banner (Simulated) -->
+              <div class="error-alert-banner" id="unsupportedFileAlert" style="display:none;">
+                <span class="error-sign">⚠️</span>
+                <div class="error-msg">
+                  <strong>අනුමත නොකරන ලද ගොනු වර්ගයකි!</strong>
+                  <p>කරුණාකර MP3, WAV හෝ M4A වර්ගයේ ශ්‍රව්‍ය ගොනුවක් පමණක් තෝරන්න.</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Prominent Primary Action Button: Start Analysis -->
+            <div class="action-btn-wrapper">
+              <button class="btn-primary-glow" id="btnStartAnalysis" onclick="startSongAnalysis()">
+                <span class="btn-text" id="btnStartAnalysisText">විශ්ලේෂණය ආරම්භ කරන්න</span>
+                <span class="btn-arrow" id="btnStartAnalysisArrow">➔</span>
+              </button>
+            </div>
+
+            <!-- Loading State Overlay / Card -->
+            <div class="analysis-loading-box" id="analysisLoadingBox" style="display: none;">
+              <div class="loading-spinner-ring"></div>
+              <h4 class="loading-title">ගීතයේ හැඟීම් සහ පද විශ්ලේෂණය කරමින් පවතී...</h4>
+              <p class="loading-sub">ශ්‍රව්‍ය නාද රටාව සහ සිංහල පදමාලාව පිරික්සමින් පවතී (Mock Analysis)</p>
+              <div class="loading-bars">
+                <div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div>
+              </div>
+            </div>
+
+            <!-- Quick Access & AI Tools (Matches HomePageSS.png) -->
+            <div class="section-container tools-section">
+              <div class="section-header-row">
+                <h3 class="section-title">ක්ෂණික පිවිසුම් සහ AI මෙවලම්</h3>
+                <span class="section-chip">AI Powered</span>
+              </div>
+
+              <div class="tools-grid">
+                <div class="tool-card" onclick="goToResultsWithTab('emotions')">
+                  <div class="tool-card-top">
+                    <div class="tool-icon-box cyan">
+                      <span>ılı</span>
+                    </div>
+                    <span class="tool-tag-pill">AI Engine</span>
+                  </div>
+                  <h4 class="tool-heading">හැඟීම් විශ්ලේෂණය</h4>
+                  <p class="tool-description">ගීතයේ භාවයන් 6ක් ප්‍රතිශත ලෙස ස්වයංක්‍රීයව වෙන්කර හඳුනාගන්න</p>
+                </div>
+
+                <div class="tool-card" onclick="goToResultsWithTab('simplified')">
+                  <div class="tool-card-top">
+                    <div class="tool-icon-box purple">
+                      <span>文</span>
+                    </div>
+                    <span class="tool-tag-pill">Smart Vocab</span>
+                  </div>
+                  <h4 class="tool-heading">පද සරල කිරීම</h4>
+                  <p class="tool-description">පැරණි හා සම්භාව්‍ය පදමාලා නවක සිසුන්ට තේරෙන සරල සිංහලට</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Suggested Sinhala Classical Songs Carousel -->
+            <div class="section-container suggested-section">
+              <div class="section-header-row">
+                <h3 class="section-title">යෝජිත සම්භාව්‍ය ගීත</h3>
+                <button class="link-btn" onclick="openToast('සියලු ගීත පුස්තකාලය')">සියල්ල බලන්න</button>
+              </div>
+
+              <div class="horizontal-scroll-list" id="suggestedSongsList">
+                <!-- Injected via JavaScript -->
+              </div>
+            </div>
+
+          </main>
+
+          <!-- Floating AI Tutor Button -->
+          <button class="floating-tutor-bubble" id="floatingTutorBtn" onclick="openTutorModal()" aria-label="නාද AI ගුරුතුමා">
+            <span class="tutor-bot-icon">🤖</span>
+            <span class="online-indicator"></span>
+            <span class="tutor-tooltip">AI ගුරුතුමා</span>
+          </button>
+
+          <!-- Bottom Navigation Bar -->
+          <nav class="mobile-tab-bar">
+            <button class="tab-item active" onclick="switchMainTab('home')">
+              <span class="tab-icon">🏠</span>
+              <span class="tab-label">මුල් පිටුව</span>
+            </button>
+            <button class="tab-item" onclick="openToast('සොයන්න (Search) - නාමාවලිය')">
+              <span class="tab-icon">🔍</span>
+              <span class="tab-label">සොයන්න</span>
+            </button>
+            <button class="tab-item" onclick="switchMainTab('results')">
+              <span class="tab-icon">📊</span>
+              <span class="tab-label">විශ්ලේෂණ</span>
+            </button>
+            <button class="tab-item" onclick="switchMainTab('profile')">
+              <span class="tab-icon">👤</span>
+              <span class="tab-label">පැතිකඩ</span>
+            </button>
+          </nav>
+        </section>
+
+        <!-- ============================================== -->
+        <!-- SCREEN 2: EMOTION ANALYSIS RESULTS (ප්‍රතිඵල) -->
+        <!-- ============================================== -->
+        <section id="screenResults" class="screen-view">
+          <!-- Top Bar (Matches DashboardSS.png) -->
+          <header class="app-header header-dashboard">
+            <button class="icon-btn-text" onclick="goBackToSelection()">
+              <span class="back-arrow">‹</span>
+              <span class="back-label">ආපසු</span>
+            </button>
+            <div class="brand-title-center">
+              <span class="logo-text-gradient">නාදය</span>
+            </div>
+            <button class="icon-btn" aria-label="දැනුම්දීම්" onclick="openToast('දැනුම්දීම් (Notifications) නැත')">
+              <span class="bell-icon">🔔</span>
+              <span class="bell-dot"></span>
+            </button>
+          </header>
+
+          <main class="scrollable-body">
+            <!-- Song Profile Hero with Glowing Avatar (Matches DashboardSS) -->
+            <div class="song-results-hero">
+              <div class="glow-avatar-wrapper">
+                <img src="" alt="Song Cover" class="results-cover-img" id="resultsCoverImg">
+                <div class="avatar-ring-glow"></div>
+                <button class="hero-mini-play-btn" id="resultsMiniPlayBtn" onclick="toggleAudioPlayback()" aria-label="වාදනය">
+                  <span id="resultsMiniPlayIcon">▶</span>
+                </button>
+              </div>
+
+              <h2 class="results-song-title" id="resultsSongTitle">නිහඬ රැයේ සිහින</h2>
+              <p class="results-artist" id="resultsArtist">පණ්ඩිත් ඩබ්.ඩී. අමරදේව සහ වාද්‍ය මණ්ඩලය</p>
+
+              <!-- Analysis Status Pill -->
+              <div class="status-verified-pill">
+                <span class="check-mark">✓</span>
+                <span>විශ්ලේෂණය සාර්ථකයි (100% භාව සම්පූර්ණයි)</span>
+              </div>
+
+              <!-- Audio Playback Scrubber -->
+              <div class="results-audio-scrubber">
+                <span class="time-stamp" id="resultsCurrentTime">01:24</span>
+                <div class="results-track" onclick="scrubAudio(event)">
+                  <div class="results-track-fill" id="resultsProgressFill" style="width: 42%;"></div>
+                </div>
+                <span class="time-stamp" id="resultsDuration">03:45</span>
+              </div>
+            </div>
+
+            <!-- Demo Disclaimer Banner -->
+            <div class="demo-banner">
+              <span class="sparkle">✦</span>
+              <span>මෙය ආදර්ශන විශ්ලේෂණ ප්‍රතිඵලයකි (Mock Prototype Results). සැබෑ AI ආකෘති අනාවැකියක් නොවේ.</span>
+            </div>
+
+            <!-- 2x2 Stats Summary Grid (Matches DashboardSS.png) -->
+            <div class="stats-grid-2x2">
+              <div class="stat-box">
+                <span class="stat-number cyan" id="statDominantEmotion">35%</span>
+                <span class="stat-caption">ප්‍රධාන: සන්සුන් බව</span>
+              </div>
+              <div class="stat-box">
+                <span class="stat-number purple" id="statDifficultyLevel">මධ්‍යම</span>
+                <span class="stat-caption">ඉගෙනුම් අපහසුතාව</span>
+              </div>
+              <div class="stat-box">
+                <span class="stat-number gold">100%</span>
+                <span class="stat-caption">සම්පූර්ණ භාව එකතුව</span>
+              </div>
+              <div class="stat-box">
+                <span class="stat-number pink">පද 3ක්</span>
+                <span class="stat-caption">පැහැදිලි සිංහලට</span>
+              </div>
+            </div>
+
+            <!-- Sub Navigation Tabs for Results -->
+            <div class="results-segmented-tabs">
+              <button class="seg-tab active" id="tabBtnEmotions" onclick="switchResultsTab('emotions')">
+                <span>හැඟීම් 6 ප්‍රතිශත</span>
+              </button>
+              <button class="seg-tab" id="tabBtnSimplified" onclick="switchResultsTab('simplified')">
+                <span>පද සරල කිරීම</span>
+              </button>
+              <button class="seg-tab" id="tabBtnLyrics" onclick="switchResultsTab('lyrics')">
+                <span>සම්පූර්ණ පදමාලාව</span>
+              </button>
+            </div>
+
+            <!-- ============================== -->
+            <!-- TAB CONTENT 1: EMOTION BREAKDOWN -->
+            <!-- ============================== -->
+            <div class="results-tab-panel active" id="panelEmotions">
+              <div class="card-glass">
+                <div class="panel-header-row">
+                  <h3 class="panel-card-title">හැඟීම් 6 හි ප්‍රතිශත බෙදීයාම</h3>
+                  <span class="sum-pill">එකතුව: 100%</span>
+                </div>
+                <p class="panel-card-summary" id="emotionDominantSummary">
+                  ගීතයේ වැඩිපුරම ප්‍රකාශ වන්නේ හුදකලා රාත්‍රියේ සිතට දැනෙන ශාන්ත හා සන්සුන් භාවයයි.
+                </p>
+
+                <!-- 6 Emotions Visual List -->
+                <div class="emotions-bar-list" id="emotionsBarList">
+                  <!-- Injected via JavaScript -->
+                </div>
+
+                <!-- Difficulty Indicator & Explanation -->
+                <div class="difficulty-guidance-card">
+                  <div class="diff-header-row">
+                    <span class="diff-label">ඉගෙනුම් අපහසුතා මට්ටම:</span>
+                    <span class="diff-badge" id="diffBadgeText">මධ්‍යම මට්ටම (L2)</span>
+                  </div>
+                  <p class="diff-explanation-text" id="diffExplanationText">
+                    මන්දගාමී තාල රටාව සහ සාහිත්‍යමය උපමා අඩංගු බැවින් නවක සිසුන්ට පද උච්චාරණය මධ්‍යස්ථව පහසුය.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <!-- ============================== -->
+            <!-- TAB CONTENT 2: SIMPLIFIED LYRICS (NORMALIZATION) -->
+            <!-- ============================== -->
+            <div class="results-tab-panel" id="panelSimplified">
+              <div class="card-glass">
+                <div class="panel-header-row">
+                  <h3 class="panel-card-title">පද සරල කිරීම (පැහැදිලි සිංහලට)</h3>
+                  <span class="sum-pill">NLP Normalization</span>
+                </div>
+                <p class="panel-card-summary">
+                  සම්භාව්‍ය සාහිත්‍යමය පදමාලා නවක ඉගෙනුම්කරුවන්ට පහසුවෙන් වැටහෙන පරිදි සරල හා පැහැදිලි සිංහලට පරිවර්තනය:
+                </p>
+
+                <div class="lyrics-comparison-list" id="lyricsComparisonList">
+                  <!-- Injected via JavaScript -->
+                </div>
+              </div>
+            </div>
+
+            <!-- ============================== -->
+            <!-- TAB CONTENT 3: FULL LYRICS -->
+            <!-- ============================== -->
+            <div class="results-tab-panel" id="panelLyrics">
+              <div class="card-glass">
+                <div class="panel-header-row">
+                  <h3 class="panel-card-title">සම්පූර්ණ පද රචනය</h3>
+                  <span class="sum-pill">Sinhala Unicode</span>
+                </div>
+                <div class="readable-lyrics-sheet" id="readableLyricsSheet">
+                  <!-- Injected via JavaScript -->
+                </div>
+              </div>
+            </div>
+
+            <!-- Prominent Music Tutor CTA Button -->
+            <div class="tutor-cta-container">
+              <button class="tutor-cta-card" onclick="openTutorModal()">
+                <div class="tutor-cta-glow"></div>
+                <div class="tutor-cta-inner">
+                  <div class="tutor-avatar-icon">🤖</div>
+                  <div class="tutor-cta-text">
+                    <h4 class="tutor-cta-heading">නාද AI ගුරුතුමාගෙන් විමසන්න</h4>
+                    <p class="tutor-cta-desc">ගීතයේ රාගය, භාවය සහ පදවල අර්ථය ගැන ඕනෑම පැනයක් අසන්න</p>
+                  </div>
+                  <span class="tutor-cta-arrow">➔</span>
+                </div>
+              </button>
+            </div>
+
+            <!-- Re-analyze Action Button -->
+            <div class="action-btn-wrapper secondary-wrapper">
+              <button class="btn-secondary-outline" onclick="goBackToSelection()">
+                <span>⟲ වෙනත් ගීතයක් විශ්ලේෂණය කරන්න</span>
+              </button>
+            </div>
+
+          </main>
+
+          <!-- Bottom Navigation Bar -->
+          <nav class="mobile-tab-bar">
+            <button class="tab-item" onclick="switchMainTab('home')">
+              <span class="tab-icon">🏠</span>
+              <span class="tab-label">මුල් පිටුව</span>
+            </button>
+            <button class="tab-item" onclick="openToast('සොයන්න (Search) - නාමාවලිය')">
+              <span class="tab-icon">🔍</span>
+              <span class="tab-label">සොයන්න</span>
+            </button>
+            <button class="tab-item active" onclick="switchMainTab('results')">
+              <span class="tab-icon">📊</span>
+              <span class="tab-label">විශ්ලේෂණ</span>
+            </button>
+            <button class="tab-item" onclick="switchMainTab('profile')">
+              <span class="tab-icon">👤</span>
+              <span class="tab-label">පැතිකඩ</span>
+            </button>
+          </nav>
+        </section>
+
+      </div> <!-- /app-screen-container -->
+
+      <!-- Interactive Music Tutor Modal Drawer -->
+      <div class="tutor-modal-overlay" id="tutorModalOverlay" onclick="closeTutorModalOnBg(event)">
+        <div class="tutor-drawer-card" id="tutorDrawer">
+          <div class="drawer-handle" onclick="closeTutorModal()"></div>
+          
+          <div class="drawer-header">
+            <div class="drawer-header-left">
+              <div class="tutor-mini-avatar">🤖</div>
+              <div>
+                <h3 class="drawer-title">නාද සංගීත AI ගුරුතුමා</h3>
+                <span class="drawer-status">● සක්‍රියයි • Sinhala Music Tutor</span>
+              </div>
+            </div>
+            <button class="drawer-close-btn" onclick="closeTutorModal()">✕</button>
+          </div>
+
+          <div class="drawer-body" id="tutorMessagesContainer">
+            <div class="tutor-msg tutor-bubble">
+              <p>ආයුබෝවන්! 🙏 මම ඔබගේ නාද සංගීත AI ගුරුතුමා. සිංහල සම්භාව්‍ය ගීතවල රාග, තාල, භාවයන් සහ පදමාලා පිළිබඳව ඔබ කැමති ඕනෑම ප්‍රශ්නයක් අසන්න!</p>
+            </div>
+
+            <!-- Suggested Tutor Prompts -->
+            <div class="suggested-prompts-section">
+              <span class="prompts-label">නිතර අසන ප්‍රශ්න තෝරන්න:</span>
+              <div class="prompts-pills-list" id="tutorQuickPrompts">
+                <!-- Injected via JavaScript -->
+              </div>
+            </div>
+          </div>
+
+          <div class="drawer-footer">
+            <div class="chat-input-row">
+              <input type="text" id="tutorTextInput" class="tutor-input-box" placeholder="ප්‍රශ්නයක් මෙහි ලියන්න..." onkeypress="handleTutorKey(event)">
+              <button class="tutor-send-btn" onclick="sendTutorQuestion()">යවන්න</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Toast Feedback Message -->
+      <div class="toast-message" id="toastMessage"></div>
+
+    </div> <!-- /mobile-frame -->
+  </div> <!-- /device-wrapper -->
+
+  <script src="app.js"></script>
+</body>
+</html>

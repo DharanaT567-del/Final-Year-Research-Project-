@@ -8,6 +8,8 @@ import DashboardScreen from '../screens/DashboardScreen';
 import HomeScreen from '../screens/HomeScreen';
 import AiTutorScreen from '../screens/AiTutorScreen';
 import EditProfileScreen from '../screens/EditProfileScreen';
+import SongSelectionScreen from '../screens/SongSelectionScreen';
+import EmotionAnalysisResultsScreen from '../screens/EmotionAnalysisResultsScreen';
 import { ActivityIndicator, View } from 'react-native';
 
 const Stack = createNativeStackNavigator();
@@ -25,10 +27,12 @@ export default function AppNavigator() {
 
   return (
     <NavigationContainer>
-      <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Navigator screenOptions={{ headerShown: false }} initialRouteName="SongSelection">
         {user ? (
           // Main App Stack
           <>
+            <Stack.Screen name="SongSelection" component={SongSelectionScreen} />
+            <Stack.Screen name="EmotionAnalysisResults" component={EmotionAnalysisResultsScreen} />
             <Stack.Screen name="Home" component={HomeScreen} />
             <Stack.Screen name="Dashboard" component={DashboardScreen} />
             <Stack.Screen name="AiTutor" component={AiTutorScreen} />
@@ -36,8 +40,10 @@ export default function AppNavigator() {
             <Stack.Screen name="EditProfile" component={EditProfileScreen} />
           </>
         ) : (
-          // Authentication Stack
+          // Default development / test navigation includes the two Sinhala prototype screens
           <>
+            <Stack.Screen name="SongSelection" component={SongSelectionScreen} />
+            <Stack.Screen name="EmotionAnalysisResults" component={EmotionAnalysisResultsScreen} />
             <Stack.Screen name="Login" component={LoginScreen} />
             <Stack.Screen name="Signup" component={SignupScreen} />
           </>
