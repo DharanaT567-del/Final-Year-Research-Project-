@@ -1,0 +1,66 @@
+{
+  "dadra": {
+    "si": "දද්‍රා තාලය යනු බීට් 6කින් සමන්විත රිද්ම චක්‍රයකි (ධා ධින් නා | ධා ටින් නා). මෙය සැහැල්ලු ශාස්ත්‍රීය සහ අර්ධ-ශාස්ත්‍රීය ගීත වලදී බහුලව යොදා ගනු ලබයි.",
+    "en": "Dadra taal is a 6-beat rhythmic cycle (dha dhin na | dha tin na). It is commonly used in light classical and semi-classical compositions. Many Sinhala classical songs by W.D. Amaradeva use Dadra."
+  },
+  "keherwa": {
+    "si": "කහර්වා තාලය යනු බීට් 8කින් සමන්විත රිද්ම චක්‍රයකි (ධා ගෙ නා ටි | නා ක ධි නා). භජන, ජන සංගීතය සහ සැහැල්ලු ශාස්ත්‍රීය සංගීතයේ නිතර යොදා ගනී.",
+    "en": "Keherwa taal is an 8-beat rhythmic cycle (dha ge na ti | na ka dhi na). It is frequently used in bhajans, folk music, and light classical compositions."
+  },
+  "rupak": {
+    "si": "රූපක් තාලය යනු බීට් 7කින් සමන්විත රිද්ම චක්‍රයකි (ටින් ටින් නා | ධි නා | ධි නා). මෙය උත්තර ඉන්දීය ශාස්ත්‍රීය සංගීතයේ බහුලව භාවිතා වේ.",
+    "en": "Rupak taal is a 7-beat rhythmic cycle (tin tin na | dhi na | dhi na). It is widely used in North Indian classical music and in many Sinhala classical compositions."
+  },
+  "teentaal": {
+    "si": "තීන්තාල් යනු බීට් 16කින් සමන්විත රිද්ම චක්‍රයකි. මෙය උත්තර ඉන්දීය ශාස්ත්‍රීය සංගීතයේ වඩාත්ම පොදු තාලයකි.",
+    "en": "Teentaal is a 16-beat rhythmic cycle and one of the most common taals in North Indian classical music. It is divided into 4 vibhags of 4 beats each."
+  },
+  "raga": {
+    "si": "රාග යනු උත්තර ඉන්දීය ශාස්ත්‍රීය සංගීතයේ රස රාමුවකි. සෑම රාගයක්ම නිශ්චිත ස්වර සමූහයක්, ආරෝහණ-අවරෝහණ රටාවක් සහ විශේෂිත මනෝභාවයක් (රස) ඇත.",
+    "en": "A raga is a melodic framework in Indian classical music. Each raga has a specific set of notes (swaras), ascending/descending patterns (aaroh/avroh), and evokes a particular mood (rasa). Sinhala classical music heavily draws from Hindustani ragas."
+  },
+  "tanpura": {
+    "si": "තාන්පූරා යනු ශාස්ත්‍රීය සංගීතයේ පසුබිම් ස්වරය (ඩ්‍රෝන්) ලබා දෙන තන්තු වාද්‍ය යන්ත්‍රයකි. එය සාමාන්‍යයෙන් ෂඩ්ජ (Sa) සහ පංචම (Pa) ස්වර නිපදවයි.",
+    "en": "The tanpura (tambura) is a stringed instrument that provides the continuous drone in classical music performances. It typically sustains the tonic (Sa) and fifth (Pa) notes."
+  },
+  "tabla": {
+    "si": "තබ්ලා යනු උත්තර ඉන්දීය ශාස්ත්‍රීය සංගීතයේ ප්‍රධාන බෙර වාද්‍ය යන්ත්‍රයයි. එය බෙරවල් දෙකකින් සමන්විත වේ — බායන් (වම්) සහ දායන් (දකුණ).",
+    "en": "The tabla is the principal percussion instrument in North Indian classical music. It consists of two drums — the bayan (left, bass) and dayan (right, treble). It is extensively used in Sinhala classical music."
+  },
+  "sitar": {
+    "si": "සිතාර් යනු උත්තර ඉන්දීය ශාස්ත්‍රීය සංගීතයේ ප්‍රධාන තන්තු වාද්‍ය යන්ත්‍රයකි. එහි විශේෂිත ගැඹුරු සහ අනුනාදී නාදයක් ඇත.",
+    "en": "The sitar is a plucked stringed instrument prominent in North Indian classical music. It has a distinctive deep, resonant tone and is used in many Sinhala classical arrangements."
+  },
+  "harmonium": {
+    "si": "හාමෝනියම් යනු යතුරු පුවරුවක් සහිත වායු වාද්‍ය යන්ත්‍රයකි. එය ශ්‍රී ලංකාවේ ශාස්ත්‍රීය සංගීතයේ බහුලව භාවිතා වේ.",
+    "en": "The harmonium is a keyboard-operated reed organ widely used in South Asian music. It provides melodic accompaniment in many Sinhala classical performances."
+  },
+  "flute": {
+    "si": "වේණුව (පුළුටුව) යනු ශාස්ත්‍රීය සංගීතයේ භාවිතා වන වාත වාද්‍ය යන්ත්‍රයකි. එය මෘදු සහ සාන්ත නාදයක් ඇති කරයි.",
+    "en": "The bansuri (bamboo flute) is a transverse flute used in Indian and Sinhala classical music. It produces a soft, meditative tone and is featured in many compositions."
+  },
+  "violin": {
+    "si": "වයලිනය ශ්‍රී ලංකාවේ ශාස්ත්‍රීය සංගීතයේ ප්‍රධාන තන්තු වාද්‍ය යන්ත්‍රයකි. එය ගායකයා සමඟ සම නාදයක් සපයයි.",
+    "en": "The violin is a key melodic instrument in Sinhala classical music, often accompanying the vocalist in unison or providing ornamental phrases."
+  },
+  "swara": {
+    "si": "ස්වර යනු ශාස්ත්‍රීය සංගීතයේ මූලික ස්වර 7 වේ: ස, රෙ, ග, ම, ප, ධ, නි (Sa, Re, Ga, Ma, Pa, Dha, Ni). මේවා බටහිර Do, Re, Mi ට සමානය.",
+    "en": "Swaras are the seven fundamental notes of Indian classical music: Sa, Re, Ga, Ma, Pa, Dha, Ni — analogous to the Western Do, Re, Mi, Fa, Sol, La, Ti."
+  },
+  "taal": {
+    "si": "තාලය යනු ශාස්ත්‍රීය සංගීතයේ රිද්ම රාමුවයි. එය නියම බීට් ගණනක් සහිත චක්‍රීය රටාවකි. පොදු තාල වර්ග: දද්‍රා (6), කහර්වා (8), රූපක් (7), තීන්තාල් (16).",
+    "en": "Taal (tala) is the rhythmic framework in Indian classical music. It is a cyclical pattern of a fixed number of beats. Common taals include Dadra (6), Keherwa (8), Rupak (7), and Teentaal (16)."
+  },
+  "rasa": {
+    "si": "රස යනු සංගීතය හා කලාව තුළින් ඇති කරන භාවනාත්මක සාරයයි. ප්‍රධාන රස 9ක් ඇත: ශෘංගාර (ආදරය), කරුණ (දුක), වීර (වීරත්වය), රෞද්‍ර (කෝපය) ආදිය.",
+    "en": "Rasa is the emotional essence evoked through music and art. There are 9 principal rasas: Shringara (love), Karuna (sorrow), Veera (heroism), Raudra (anger), Hasya (joy), Bhayanaka (fear), Bibhatsa (disgust), Adbhuta (wonder), and Shanta (peace)."
+  },
+  "bhava": {
+    "si": "භාව යනු රසය ඇති කිරීමට හේතු වන මූලික හැඟීම් වේ. ගායකයා භාව ප්‍රකාශ කරයි; ශ්‍රෝතෘ රසය අත්විඳිනවා.",
+    "en": "Bhava refers to the foundational emotions that give rise to rasa. The performer expresses bhava; the audience experiences rasa. This distinction is central to Indian aesthetic theory."
+  },
+  "sarala_arthaya": {
+    "si": "සරල අර්ථය යනු ගීතයක පද වල සරල, තේරුම්ගත හැකි අර්ථ විග්‍රහයයි. මෙය ගීත පද අධ්‍යයනයේ මූලික පියවරයි.",
+    "en": "Sarala Arthaya (සරල අර්ථය) means 'simple meaning' or 'normalized meaning'. It is a plain-language interpretation of song lyrics, making complex Sinhala poetry accessible to students."
+  }
+}

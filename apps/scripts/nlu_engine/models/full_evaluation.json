@@ -1,0 +1,12 @@
+{
+  "intent_classifier": {
+    "macro_f1": 1.0,
+    "weighted_f1": 1.0
+  },
+  "entity_extractor": {
+    "accuracy": 1.0
+  },
+  "end_to_end": {
+    "accuracy": 1.0
+  }
+}

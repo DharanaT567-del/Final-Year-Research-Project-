@@ -1,0 +1,298 @@
+{
+  "_comment": "Question templates per intent in 3 styles: Sinhala (si), English (en), Singlish (singlish). <SONG> is the masked entity placeholder. <ARTIST> for artist-specific intents. <CONCEPT> for glossary intents.",
+  "Ask_Song_Meaning": {
+    "si": [
+      "<SONG>",
+      "<SONG> ගීතයේ තේරුම කුමක්ද?",
+      "<SONG> ගීතයේ සරල අර්ථය කියන්න",
+      "<SONG> කියන ගීතයේ අදහස මොකක්ද?",
+      "<SONG> ගීතයේ පද වල අර්ථය පැහැදිලි කරන්න",
+      "<SONG> ගීතය ගැන කියන්න",
+      "<SONG> ගැන කියන්න",
+      "<SONG> ගැන විස්තර",
+      "<SONG> ගීතයේ සරල අර්ථය මොකක්ද",
+      "<SONG> කියන ගීතය ගැන පැහැදිලි කරන්නකෝ",
+      "<SONG> ගීතයේ පද අර්ථ කරන්න",
+      "<SONG> ගීතයෙන් කියන්නේ මොකක්ද",
+      "<SONG> ගීතයේ meaning එක මොකක්ද"
+    ],
+    "en": [
+      "<SONG>",
+      "Tell me about <SONG>",
+      "Tell me about the song <SONG>",
+      "About <SONG>",
+      "Can you tell me about <SONG>?",
+      "What is the meaning of <SONG>?",
+      "Tell me the meaning of <SONG>",
+      "What does <SONG> mean?",
+      "Explain the lyrics of <SONG>",
+      "Can you explain <SONG> to me?",
+      "What is <SONG> about?",
+      "I want to understand the lyrics of <SONG>",
+      "What is the simple meaning of <SONG>?",
+      "Explain <SONG> song meaning",
+      "What does the song <SONG> convey?",
+      "Information about <SONG>"
+    ],
+    "singlish": [
+      "<SONG>",
+      "<SONG> gana kiyanna",
+      "<SONG> gana",
+      "<SONG> visthara",
+      "<SONG> geetheye theruma mokakda?",
+      "<SONG> meaning eka mokakda?",
+      "<SONG> meaning eka",
+      "<SONG> geetheye meaning kiyannan",
+      "<SONG> kiyanne mokakda?",
+      "<SONG> geetheye adahasa mokakda",
+      "<SONG> geetheye sarala arthaya mokakda",
+      "tell me about <SONG>"
+    ]
+  },
+  "Ask_Song_Artist": {
+    "si": [
+      "<SONG> ගීතය ගායනා කළේ කවුද?",
+      "<SONG> කියන ගීතය කවුද ගැයුවේ?",
+      "<SONG> ගායකයා කවුද?",
+      "<SONG> ගීතය කවුද කියවන්නේ?",
+      "<SONG> ගයන්නේ කවුද?",
+      "<SONG> ගීතයේ ගායකයා මොනවාද"
+    ],
+    "en": [
+      "Who sings <SONG>?",
+      "Who sang <SONG>?",
+      "Who sung <SONG>?",
+      "Who is the singer of <SONG>?",
+      "Who is the artist of <SONG>?",
+      "Which artist sings <SONG>?",
+      "Tell me the singer of <SONG>",
+      "Who performs <SONG>?",
+      "Who sang the song <SONG>?"
+    ],
+    "singlish": [
+      "<SONG> gayana kale kawuda?",
+      "<SONG> kiyanne kawuda?",
+      "<SONG> gayakaya kawuda?",
+      "<SONG> singer kawuda?",
+      "<SONG> sing kale kawda?",
+      "<SONG> sang kale kawda?"
+    ]
+  },
+  "Ask_Composer": {
+    "si": [
+      "<SONG> ගීතය සංගීතවත් කළේ කවුද?",
+      "<SONG> ගීතයේ සංගීතය කවුද?",
+      "<SONG> සංගීත අධ්‍යක්ෂණය කළේ කවුද?",
+      "<SONG> ගීතයට සංගීතය සපයන්නේ කවුද?"
+    ],
+    "en": [
+      "Who composed <SONG>?",
+      "Who is the composer of <SONG>?",
+      "Who composed the music for <SONG>?",
+      "Who is the music director of <SONG>?",
+      "Tell me the composer of <SONG>"
+    ],
+    "singlish": [
+      "<SONG> sangeetha kale kawuda?",
+      "<SONG> compose kale kawuda?",
+      "<SONG> composer kawuda?"
+    ]
+  },
+  "Ask_Lyricist": {
+    "si": [
+      "<SONG> ගීතයේ පද ලියූයේ කවුද?",
+      "<SONG> ගීතයේ රචකයා කවුද?",
+      "<SONG> පද රචනා කළේ කවුද?",
+      "<SONG> ගීත පද ලියන්නේ කවුද?"
+    ],
+    "en": [
+      "Who wrote the lyrics of <SONG>?",
+      "Who is the lyricist of <SONG>?",
+      "Who penned the words of <SONG>?",
+      "Tell me the lyricist of <SONG>",
+      "Who wrote <SONG>?"
+    ],
+    "singlish": [
+      "<SONG> pada liyuwe kawuda?",
+      "<SONG> lyricist kawuda?",
+      "<SONG> pada rachana kale kawuda?"
+    ]
+  },
+  "Ask_Song_Difficulty": {
+    "si": [
+      "<SONG> ගීතයේ අපහසුතා මට්ටම කීයද?",
+      "<SONG> කියන එක ගායනා කරන්න අමාරුද?",
+      "<SONG> ගීතය අමාරුද ලේසිද?",
+      "<SONG> difficulty එක කීයද?",
+      "<SONG> ගීතය ආරම්භකයෙකුට හොඳද?"
+    ],
+    "en": [
+      "What is the difficulty of <SONG>?",
+      "How hard is <SONG> to sing?",
+      "Is <SONG> a beginner song?",
+      "What difficulty level is <SONG>?",
+      "Is <SONG> easy or difficult?",
+      "Tell me the difficulty of <SONG>"
+    ],
+    "singlish": [
+      "<SONG> difficulty eka keeyada?",
+      "<SONG> amaruda lesida?",
+      "<SONG> beginner kenekuta hodada?"
+    ]
+  },
+  "Ask_Song_Emotion": {
+    "si": [
+      "<SONG> ගීතයේ ප්‍රධාන හැඟීම මොකක්ද?",
+      "<SONG> ගීතයේ emotion එක මොකක්ද?",
+      "<SONG> ගීතයේ රස භාවය කුමක්ද?",
+      "<SONG> ගීතය ආදර ගීතයක්ද?",
+      "<SONG> ගීතයේ හැඟීම් විශ්ලේෂණය කියන්න"
+    ],
+    "en": [
+      "What emotion does <SONG> convey?",
+      "What is the dominant emotion of <SONG>?",
+      "Is <SONG> a sad song?",
+      "What mood does <SONG> express?",
+      "Tell me the emotional tone of <SONG>",
+      "What feelings does <SONG> evoke?"
+    ],
+    "singlish": [
+      "<SONG> emotion eka mokakda?",
+      "<SONG> sad song ekakda?",
+      "<SONG> geetheye hangima mokakda?"
+    ]
+  },
+  "Ask_Lyrics": {
+    "si": [
+      "<SONG> ගීතයේ පද කියන්න",
+      "<SONG> lyrics කියන්න",
+      "<SONG> ගීත පද මොනවාද?",
+      "<SONG> ගීතයේ වචන මොනවාද?",
+      "<SONG> ගීතයේ පද මට අවශ්‍යයි"
+    ],
+    "en": [
+      "What are the lyrics of <SONG>?",
+      "Show me the lyrics of <SONG>",
+      "Can you give me the lyrics of <SONG>?",
+      "Tell me the words of <SONG>",
+      "I need the lyrics of <SONG>"
+    ],
+    "singlish": [
+      "<SONG> lyrics kiyannan",
+      "<SONG> pada monawada?",
+      "<SONG> geetha pada kiyannan"
+    ]
+  },
+  "Ask_Artist_Songs": {
+    "si": [
+      "<ARTIST> ගායනා කළ ගීත මොනවාද?",
+      "<ARTIST> ගේ ගීත ලැයිස්තුව කියන්න",
+      "<ARTIST> කියන්නේ මොන ගීතද?",
+      "<ARTIST> ගයන ගීත මොනවාද?"
+    ],
+    "en": [
+      "What songs does <ARTIST> sing?",
+      "List songs by <ARTIST>",
+      "Show me songs by <ARTIST>",
+      "Which songs are sung by <ARTIST>?",
+      "Tell me the songs of <ARTIST>"
+    ],
+    "singlish": [
+      "<ARTIST> gayana kala geeth monawada?",
+      "<ARTIST> ge songs monawada?",
+      "<ARTIST> kiyanne mon geethda?"
+    ]
+  },
+  "Ask_Concept": {
+    "si": [
+      "<CONCEPT> කියන්නේ මොකක්ද?",
+      "<CONCEPT> ගැන කියන්න",
+      "<CONCEPT> යනු කුමක්ද?",
+      "<CONCEPT> ගැන පැහැදිලි කරන්න",
+      "<CONCEPT> මොකක්ද?"
+    ],
+    "en": [
+      "What is <CONCEPT>?",
+      "Explain <CONCEPT>",
+      "Tell me about <CONCEPT>",
+      "What does <CONCEPT> mean?",
+      "Can you explain what <CONCEPT> is?"
+    ],
+    "singlish": [
+      "<CONCEPT> kiyanne mokakda?",
+      "<CONCEPT> gena kiyannan",
+      "<CONCEPT> mokakda?"
+    ]
+  },
+  "Greeting": {
+    "si": [
+      "ආයුබෝවන්",
+      "හෙලෝ",
+      "කොහොමද",
+      "සුභ උදෑසනක්",
+      "හාය්"
+    ],
+    "en": [
+      "Hello",
+      "Hi",
+      "Hey",
+      "Good morning",
+      "Good evening",
+      "Hi there",
+      "Greetings"
+    ],
+    "singlish": [
+      "ayubowan",
+      "hello",
+      "kohomada",
+      "hi machan"
+    ]
+  },
+  "Capabilities": {
+    "si": [
+      "ඔබට මොකක්ද කරන්න පුලුවන්?",
+      "ඔබ මොනවද දන්නේ?",
+      "ඔයාට මොනවද කරන්න පුලුවන්?",
+      "ඔබේ හැකියාවන් මොනවාද?",
+      "මට මොනවද අහන්න පුලුවන්?"
+    ],
+    "en": [
+      "What can you do?",
+      "What are your capabilities?",
+      "What do you know?",
+      "How can you help me?",
+      "What questions can I ask?",
+      "What kind of questions can you answer?",
+      "Tell me what you can do"
+    ],
+    "singlish": [
+      "oyata mokakda karanna puluwan?",
+      "mata monawada ahanna puluwan?",
+      "oya monawada danne?"
+    ]
+  },
+  "Out_Of_Scope": {
+    "si": [
+      "අද කාලගුණය කොහොමද?",
+      "ක්‍රිකට් තරඟය ගැන කියන්න",
+      "ඉංග්‍රීසි ගීතයක් ගැන කියන්න",
+      "Python code එකක් ලියන්න",
+      "ලෝක ඉතිහාසය ගැන කියන්න"
+    ],
+    "en": [
+      "What is the weather today?",
+      "Tell me about cricket",
+      "Write Python code",
+      "What is the capital of France?",
+      "Tell me a joke",
+      "Who is the president?",
+      "Help me with math homework",
+      "What is machine learning?"
+    ],
+    "singlish": [
+      "ada weather eka kohomada?",
+      "cricket match eka gena kiyannan",
+      "english song ekak recommend karanna"
+    ]
+  }
+}
